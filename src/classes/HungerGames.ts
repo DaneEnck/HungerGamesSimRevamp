@@ -169,7 +169,7 @@ export default function hungerGames(contestants:Array<Contestant|Group>,contCopy
         }
     }
     console.log("\n");
-    //trim shattered groups
+    //delete groups with no living members or one living member
     for(let i = numConts; i < contestants.length; i++){
         let temp = contestants[i];
         if(temp instanceof Group){//should always be true, have to make my compiler happy
