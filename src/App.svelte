@@ -252,7 +252,7 @@
 		</div>
 		{#each creationConts as cont,i}
 			<div class = "cont-creator">
-				<img src={cont.getImage()[0]} alt="idk" class="create-pic">
+				<img src={cont.getImage()[0]} alt="img error" class="create-pic">
 				<!--custom file upload button via label-->
 				<label class = "input-label">
 					<input accept="image/png, image/jpeg" bind:files type="file" on:change={() => fileSelectHandler(cont)} id="selectedFile" style="display:none;">
@@ -307,7 +307,7 @@
 			<!--Images-->
 			<div style="margin:auto">
 				{#each event.images as thing}
-					<img src={thing} alt = "idk" class = "create-pic">
+					<img src={thing} alt = "img error" class = "create-pic">
 				{/each}
 			</div>
 			<!--Main content-->
@@ -334,7 +334,7 @@
 	{:else if toggle == 2}
 		<div style="margin:auto">
 			{#each endimgs as image}
-				<img src={image} alt="idk" class="create-pic">
+				<img src={image} alt="img error" class="create-pic">
 			{/each}
 		</div>
 		{#each endstr as line}
@@ -353,9 +353,9 @@
 							<div class="cont-info-block">
 								<!--grayscale pic if dead-->
 								{#if thing.getCond() == Condition.DEAD}
-									<img src={thing.getImage()[0]} alt="idk" class="dead-pic">
+									<img src={thing.getImage()[0]} alt="img error" class="dead-pic">
 								{:else}
-									<img src={thing.getImage()[0]} alt="idk" class="create-pic">
+									<img src={thing.getImage()[0]} alt="img error" class="create-pic">
 								{/if}
 								<p style = "margin:1px">{thing.getName()}</p>
 								<p style = "margin:1px">{thing.getKills()} kills</p>
@@ -392,7 +392,7 @@
 				{#each displays as thing} <!--TODO: remove this each loop-->
 					<div style="margin:auto">
 						{#each thing.getImage() as image}
-							<img src={image} alt="idk" class="create-pic">
+							<img src={image} alt="img error" class="create-pic">
 						{/each}
 					</div>
 					<p style = "margin:10px">{thing.getName()} are a group</p>
