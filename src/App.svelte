@@ -316,14 +316,14 @@
 			{#if combatDetailToggle}
 				{#each event.combat as thing, m}
 					{#if m != event.combat.length -1}
-						<p style="font-size:11px">{thing}</p>
+						<p style="font-size:12px">{thing}</p>
 					{/if}
 				{/each}
 			<!--Combat (single line)-->
 			{:else}
 				{#each event.combat as thing, m}
 					{#if m == event.combat.length - 1}
-						<p style="font-size:10px">{thing}</p>
+						<p style="font-size:12px">{thing}</p>
 					{/if}
 				{/each}
 			{/if}
