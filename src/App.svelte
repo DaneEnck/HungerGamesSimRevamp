@@ -14,10 +14,10 @@
 
 	let creationConts = new Array<Contestant>(); //stores all contestants created during character creation
 
-	let parties = new Array<Contestant|Group>(); //stores all contestants and groups
-	//Contestants and groups are partially polymorphic and are stored in the same array to simplify unweighted random selection between the two
-	//any index >= numConts is a group. This is known externally but must be type checked anyways
-	//This simplification has complicated the code in other areas, but it is still a net positive imo
+	let parties = new Array<Contestant|Group>(); /*stores all contestants and groups
+	Contestants and groups are partially polymorphic and are stored in the same array to simplify unweighted random selection between the two
+	any index >= numConts is a group. This is known externally but must be type checked anyways
+	This simplification has complicated the code in other areas, but it is still a net positive imo*/
 
 	let partyCopy = new Array<Contestant|Group>(); //temporary copy of parties array. 
 	//Passed to the hungergames function, where parties are removed one by one to ensure each entry is used once
@@ -115,6 +115,7 @@
 	const handlePosPronoun = (e,c:Contestant) => {
 		c.setPosPronoun(e.target.value);
 	}
+	//handler for add contestant button
 	const addContHandler = () => {
 		creationConts.push(new Contestant("Contestant " + (creationConts.length).toString(),"he","him","his","Default.png"));
 		selectBinds.push("1");
@@ -128,9 +129,12 @@
 		numConts = creationConts.length;
 		creationConts = creationConts;//direct assignment needed to update svelte reactivity
 	}
+	//create 2D array which places contestants into 6 person arrays, groups get their own array each
+	//this makes it easier to display contestants in rows
 	const prepDisplay = () => {
 		displayParties = [];
 		let temparr = [];
+		//create 6 contestants arrays
 		for(let i = 0; i < numConts; i++){
 			temparr.push(parties[i]);
 			if((i + 1) % 6 == 0){
@@ -138,14 +142,17 @@
 				temparr = [];
 			}
 		}
+		//push incomplete array, in case numConts % 6 != 0
 		if(temparr.length > 0){
 			displayParties.push(temparr);
 		}
+		//add all groups as seperate array to be displayed individually
 		for(let i = numConts; i < parties.length; i++){
 			displayParties.push([parties[i]])
 		}
 		toggle = 3;
 	}
+	//button that exits contestant view screen
 	const backToGame = () => {
 		toggle = 1;
 	}
@@ -158,6 +165,8 @@
 		}
 		creationConts = creationConts;//direct assignment needed to update svelte reactivity
 	}
+	//change pronouns of contestant based on dropdown selection
+	//customtoggle replaces dropdown with 3 text inputs
 	const newPronounHandler = (c:Contestant,s:number) => {
 		let val = selectBinds[s];
 		if(val == "1"){
@@ -187,6 +196,7 @@
 		c.setPronounCustomToggle(false);
 		creationConts = creationConts;//direct assignment needed to update svelte reactivity
 	}
+	//return to creation menu after complete game, retaining contestant names, images, and pronouns
 	const resetGame = () => {
 		toggle = 0;
 		day = 0;
@@ -208,21 +218,23 @@
 			selectBinds.pop();
 		}
 	}
+	//file var is bound to every file input. this function is called when any file input is clicked via on:change
+	//function is passed the current contestant from the each loop, and the data URL of the image is then passed to the contestant
 	const fileSelectHandler = (c: Contestant) => {
 		let file = files[0];
 		let reader = new FileReader();
 		reader.readAsDataURL(file);
 		reader.addEventListener("load", function () {
-			console.log(reader.result);
-			console.log(reader.result as string);
 			let temp = reader.result as string;
 			c.setImage(temp);
 			creationConts = creationConts;//direct assignment needed to update svelte reactivity
 		});
 	}
+	//when about button is clicked
 	const aboutHandler = () => {
 		toggle = 4;
 	}
+	//when return in about menu is clicked
 	const returnCreationHandler = () => {
 		toggle = 0;
 	}
@@ -334,10 +346,12 @@
 		<div class = "all-rows">
 		{#each displayParties as displays}
 			{#if displays[0] instanceof Contestant}
+				<!--row of contestants-->
 				<div class = "six-block">
 					{#each displays as thing}
 						{#if thing instanceof Contestant} <!-- should always be true. TODO improve type checks-->
 							<div class="cont-info-block">
+								<!--grayscale pic if dead-->
 								{#if thing.getCond() == Condition.DEAD}
 									<img src={thing.getImage()[0]} alt="idk" class="dead-pic">
 								{:else}
@@ -345,6 +359,7 @@
 								{/if}
 								<p style = "margin:1px">{thing.getName()}</p>
 								<p style = "margin:1px">{thing.getKills()} kills</p>
+								<!--change text color based on condition-->
 								{#if thing.getCond() == Condition.HEALTHY}
 									<p style = "margin:1px;color:green">{thing.getCondName()}</p>
 								{:else if thing.getCond() == Condition.WOUND_LOW}
@@ -356,10 +371,12 @@
 								{:else if thing.getCond() == Condition.DEAD}
 									<p style = "margin:1px;color:red">{thing.getCondName()}</p>
 								{/if}	
+								<!--list weapon-->
 								{#if thing.getWeapon().getName() != "fists"}
 									<p style = "margin:1px">Weapon:</p>
 									<p style = "margin:1px">{thing.getWeapon().getName()}</p>
 								{/if}
+								<!--list items-->
 								{#if thing.getItems().length > 0}
 									<p style = "margin:1px">Items:</p>
 									{#each thing.getItems() as item}
@@ -371,13 +388,15 @@
 					{/each}
 				</div>
 			{:else}
-				{#each displays as thing}
+				<!--group-->
+				{#each displays as thing} <!--TODO: remove this each loop-->
 					<div style="margin:auto">
 						{#each thing.getImage() as image}
 							<img src={image} alt="idk" class="create-pic">
 						{/each}
 					</div>
 					<p style = "margin:10px">{thing.getName()} are a group</p>
+					<!--items-->
 					{#if thing.getItems().length == 1}
 						<span>Items: {thing.getItems()[0].getName()}</span>
 					{:else if thing.getItems().length == 2}
