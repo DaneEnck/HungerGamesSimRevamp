@@ -372,6 +372,7 @@
 									<p style = "margin:1px;color:red">{thing.getCondName()}</p>
 								{/if}	
 								<!--list weapon-->
+								<!--characters without a weapon have "fists" by default-->
 								{#if thing.getWeapon().getName() != "fists"}
 									<p style = "margin:1px">Weapon:</p>
 									<p style = "margin:1px">{thing.getWeapon().getName()}</p>
