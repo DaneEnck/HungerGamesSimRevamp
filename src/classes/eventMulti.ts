@@ -42,7 +42,7 @@ let multiList: Array<Function> = [
         if(Math.random() < 0.5){
             if(y instanceof Contestant){
                 y.downCond(99);
-                return {images:x.getImage().concat(y.getImage()),main:x.getName() + x.verbSwitchName(" sneaks "," sneak ") + "up on " + y.getName() + " while " + y.getPronoun() + y.verbSwitchPro(" is "," are ") + " sleeping, and kill " + y.getObjpronoun() + " silently",combat:[]};
+                return {images:x.getImage().concat(y.getImage()),main:x.getName() + x.verbSwitchName(" sneaks "," sneak ") + "up on " + y.getName() + " while " + y.getPronoun() + y.verbSwitchPro(" is "," are ") + " sleeping, and kills " + y.getObjpronoun() + " silently",combat:[]};
             }
             else{
                 let randnum = Math.floor(Math.random() * y.getConts().length);
