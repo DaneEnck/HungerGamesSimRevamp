@@ -290,7 +290,7 @@
 					<button on:click={() => closeCustomPronoun(cont)} class="back-button">back</button>
 				{/if}
 				<!--delete button-->
-				<button on:click = {() => removeContHandler(cont)} class = "create-x">X</button>
+				<button disabled = '{numConts == 1}' on:click = {() => removeContHandler(cont)} class = "create-x">X</button>
 			</div>
 		{/each}
 		<button on:click={addContHandler}>add contestant</button>
