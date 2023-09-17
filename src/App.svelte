@@ -38,6 +38,8 @@
 
 	let combatDetailToggle = true;//used to toggle between multi line & single line combat description
 
+	let numContsWarningToggle = false;//used to toggle warning text on invalid contestant input
+
 	let files;
 
 	for(let i = 0; i < numConts; i++){
@@ -91,15 +93,21 @@
 	}
 	//handler for submit button on character creation screen. done through submission instead of immediate reaction to avoid early input during multi digit numbers
 	const submitNumConts = () => {
-		//shorten parties array to match new number of contestants
-		while(creationConts.length > numConts){
-			creationConts.pop();
-			selectBinds.pop();
+		if (numConts == 0){
+			numContsWarningToggle = true;
 		}
-		//lengthen parties array to match new number of contestants
-		while(creationConts.length < numConts){
-			creationConts.push(new Contestant("Contestant " + (parties.length).toString(),"he","him","his","Default.png"));
-			selectBinds.push("1");
+		else{
+			numContsWarningToggle = false;
+			//shorten parties array to match new number of contestants
+			while(creationConts.length > numConts){
+				creationConts.pop();
+				selectBinds.pop();
+			}
+			//lengthen parties array to match new number of contestants
+			while(creationConts.length < numConts){
+				creationConts.push(new Contestant("Contestant " + (parties.length).toString(),"he","him","his","Default.png"));
+				selectBinds.push("1");
+			}
 		}
 		creationConts = creationConts;//direct assignment needed to update svelte reactivity
 	}
@@ -250,6 +258,9 @@
 			<input type = "text" bind:value={numConts}>
 			<button on:click={submitNumConts}>submit</button>
 		</div>
+		{#if numContsWarningToggle}
+			<p>Error, there must be contestants present to play the game</p>
+		{/if}
 		{#each creationConts as cont,i}
 			<div class = "cont-creator">
 				<img src={cont.getImage()[0]} alt="img error" class="create-pic">
