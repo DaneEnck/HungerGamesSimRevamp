@@ -79,7 +79,7 @@ let itemList:Array<item> = [
             if(x.getCond() < 4){
                 x.upCond(1);
                 y.downUses(1);
-                return x.getName() + " drinks some of " + x.getPospronoun() + "water and is now " + x.getCondName();
+                return x.getName() + " drinks some of " + x.getPospronoun() + " water and is now " + x.getCondName();
             }
             return "false";
         }
