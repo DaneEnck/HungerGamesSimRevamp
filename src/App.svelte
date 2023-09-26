@@ -42,6 +42,14 @@
 
 	let files;
 
+	let contExportData:string;
+
+	let exportBlob:Blob;
+
+	let exportURL:string;
+
+	let exportFileName:string = "cast"
+
 	for(let i = 0; i < numConts; i++){
 		selectBinds.push("1");
 		creationConts.push(new Contestant("Contestant " + i.toString(),"he","him","his","Default.png"));
@@ -226,6 +234,7 @@
 			selectBinds.pop();
 		}
 	}
+
 	//file var is bound to every file input. this function is called when any file input is clicked via on:change
 	//function is passed the current contestant from the each loop, and the data URL of the image is then passed to the contestant
 	const fileSelectHandler = (c: Contestant) => {
@@ -238,13 +247,36 @@
 			creationConts = creationConts;//direct assignment needed to update svelte reactivity
 		});
 	}
+
 	//when about button is clicked
 	const aboutHandler = () => {
 		toggle = 4;
 	}
+
 	//when return in about menu is clicked
 	const returnCreationHandler = () => {
 		toggle = 0;
+	}
+
+	const downloadExport = () => {
+		contExportData = numConts.toString() + "\n";
+		for (let i = 0; i < creationConts.length; i++){
+			//',' used as separator for csv
+			contExportData += creationConts[i].getImage() + ",";
+			contExportData += creationConts[i].getName() + ",";
+			contExportData += creationConts[i].getPronoun() + ",";
+			contExportData += creationConts[i].getObjpronoun() + ",";
+			contExportData += creationConts[i].getPospronoun() + "\n";
+		}
+		exportBlob = new Blob([contExportData], {type: "text/csv"});
+		exportURL = window.URL.createObjectURL(exportBlob);
+		if(exportFileName == ""){//if no filename is entered, default to "cast"
+			exportFileName = "cast";
+		}
+		if(exportFileName.includes(".")){
+			exportFileName = exportFileName.substring(0,exportFileName.indexOf("."));
+		}
+		document.getElementById("downloadLink").click();
 	}
 </script>
 
@@ -295,6 +327,13 @@
 		{/each}
 		<button on:click={addContHandler}>add contestant</button>
 		<p><br/></p>
+		<!--Export file creation & download-->
+		<a href={exportURL} style="display:none" id="downloadLink" download = {exportFileName}>.</a>
+		<span>Filename:</span>
+		<input type = "text" bind:value={exportFileName}>
+		<button on:click={downloadExport}>Download</button>
+		<p><br/></p>
+		<!--Game Start-->
 		<button on:click={creationEndHandler}>Start Game!</button>
 	<!--Main game display, shows list of events and activities of the characters-->
 	{:else if toggle == 1}
