@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@rollup/plugin-typescript": "^11.1.2",
+    "papaparse": "^5.4.1",
     "sirv-cli": "^2.0.0",
     "tslib": "^2.6.1"
   }

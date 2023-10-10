@@ -4,6 +4,7 @@
 	import Group from './classes/group';
 	import hungerGames from './classes/HungerGames';
 	import type EventStruct from './classes/eventStruct';
+	import Papa from 'papaparse';
 	/*
 		General Vocabulary Overview:
 		Contestant - a single character
@@ -40,7 +41,19 @@
 
 	let numContsWarningToggle = false;//used to toggle warning text on invalid contestant input
 
-	let files;
+	let imgFiles;
+
+	let inputFiles;
+
+	let linkInput:string;
+
+	let nameInput:string;
+
+	let pronounInput:string;
+
+	let objpronounInput:string;
+
+	let pospronounInput:string;
 
 	let contExportData:string;
 
@@ -52,7 +65,7 @@
 
 	for(let i = 0; i < numConts; i++){
 		selectBinds.push("1");
-		creationConts.push(new Contestant("Contestant " + i.toString(),"he","him","his","Default.png"));
+		creationConts.push(new Contestant("" ,"he","him","his","Default.png"));
 	}
 
 	//function used on game start and after each day. passes the parties array to the hungergames to generate events
@@ -94,6 +107,9 @@
 	const creationEndHandler = () => {
 		//copy contestants from creationConts to parties
 		for(let i = 0; i < numConts; i++){
+			if(creationConts[i].getName() == ""){
+				creationConts[i].setName("Contestant " + (i + 1).toString());
+			}
 			parties.push(creationConts[i]);
 		}
 		toggle = 1;
@@ -113,7 +129,7 @@
 			}
 			//lengthen parties array to match new number of contestants
 			while(creationConts.length < numConts){
-				creationConts.push(new Contestant("Contestant " + (parties.length).toString(),"he","him","his","Default.png"));
+				creationConts.push(new Contestant("" ,"he","him","his","Default.png"));
 				selectBinds.push("1");
 			}
 		}
@@ -133,7 +149,7 @@
 	}
 	//handler for add contestant button
 	const addContHandler = () => {
-		creationConts.push(new Contestant("Contestant " + (creationConts.length).toString(),"he","him","his","Default.png"));
+		creationConts.push(new Contestant("" ,"he","him","his","Default.png"));
 		selectBinds.push("1");
 		numConts = creationConts.length;
 		creationConts = creationConts;//direct assignment needed to update svelte reactivity
@@ -238,7 +254,7 @@
 	//file var is bound to every file input. this function is called when any file input is clicked via on:change
 	//function is passed the current contestant from the each loop, and the data URL of the image is then passed to the contestant
 	const fileSelectHandler = (c: Contestant) => {
-		let file = files[0];
+		let file = imgFiles[0];
 		let reader = new FileReader();
 		reader.readAsDataURL(file);
 		reader.addEventListener("load", function () {
@@ -261,11 +277,11 @@
 	const downloadExport = () => {
 		contExportData = numConts.toString() + "\n";
 		for (let i = 0; i < creationConts.length; i++){
-			//',' used as separator for csv
-			contExportData += creationConts[i].getImage() + ",";
-			contExportData += creationConts[i].getName() + ",";
-			contExportData += creationConts[i].getPronoun() + ",";
-			contExportData += creationConts[i].getObjpronoun() + ",";
+			//'@' used as separator for csv
+			contExportData += creationConts[i].getImage() + "@";
+			contExportData += creationConts[i].getName() + "@";
+			contExportData += creationConts[i].getPronoun() + "@";
+			contExportData += creationConts[i].getObjpronoun() + "@";
 			contExportData += creationConts[i].getPospronoun() + "\n";
 		}
 		exportBlob = new Blob([contExportData], {type: "text/csv"});
@@ -278,6 +294,52 @@
 		}
 		document.getElementById("downloadLink").click();
 	}
+
+	const csvInputHandler = () => {
+		Papa.parse(inputFiles[0], {
+			delimiter: "@",
+			complete: function(results) {
+				let temp = results.data;
+				console.log(temp);
+				numConts = parseInt(temp[0][0]);
+				//shorten parties array to match new number of contestants
+				while(creationConts.length > numConts){
+					creationConts.pop();
+					selectBinds.pop();
+				}
+				//lengthen parties array to match new number of contestants
+				while(creationConts.length < numConts){
+					creationConts.push(new Contestant("","he","him","his","Default.png"));
+					selectBinds.push("1");
+				}
+				for(let i = 0; i < numConts; i++){
+					creationConts[i].setImage(temp[i+1][0]);
+					creationConts[i].setName(temp[i+1][1]);
+					creationConts[i].setPronoun(temp[i+1][2]);
+					creationConts[i].setObjPronoun(temp[i+1][3]);
+					creationConts[i].setPosPronoun(temp[i+1][4]);
+				}
+				//update all select binds, updating the pronoun dropdowns
+				for(let i = 0; i < numConts; i++){
+					if(creationConts[i].getPronoun() == "he" && creationConts[i].getObjpronoun() == "him" && creationConts[i].getPospronoun() == "his"){
+						selectBinds[i] = "1";
+					}
+					else if(creationConts[i].getPronoun() == "she" && creationConts[i].getObjpronoun() == "her" && creationConts[i].getPospronoun() == "her"){
+						selectBinds[i] = "2";
+					}
+					else if(creationConts[i].getPronoun() == "they" && creationConts[i].getObjpronoun() == "them" && creationConts[i].getPospronoun() == "their"){
+						selectBinds[i] = "3";
+					}
+					else{
+						selectBinds[i] = "4";
+						creationConts[i].setPronounCustomToggle(true);
+					}
+				}
+				creationConts = creationConts;//direct assignment needed to update svelte reactivity
+			}
+		});
+	}
+
 </script>
 
 <main>
@@ -298,7 +360,7 @@
 				<img src={cont.getImage()[0]} alt="img error" class="create-pic">
 				<!--custom file upload button via label-->
 				<label class = "input-label">
-					<input accept="image/png, image/jpeg" bind:files type="file" on:change={() => fileSelectHandler(cont)} id="selectedFile" style="display:none;">
+					<input accept="image/png, image/jpeg" bind:files={imgFiles} type="file" on:change={() => fileSelectHandler(cont)} id="selectedFile" style="display:none;">
 					<p class = "fileupload">File Upload</p>
 				</label> 
 				<p style="margin:auto">&nbspOR&nbsp</p>
@@ -306,7 +368,7 @@
 				<input type = "text" placeholder="Image Link" on:input={(e) => imgHandler(e,cont)} class = "create-input">
 				<p style="margin:auto">&nbsp&nbsp&nbsp</p><!--TODO: border instead of this nonsense-->
 				<!--name input-->
-				<input type = "text" placeholder="Name" on:input={(e) => handleInputName(e,cont)} class = "create-input">
+				<input type = "text" value={cont.getName()} placeholder="Name" on:input={(e) => handleInputName(e,cont)} class = "create-input">
 				<!--pronoun selector-->
 				{#if cont.getPronounCustomToggle() == false}
 					<select bind:value={selectBinds[i]} on:change={() => newPronounHandler(cont, i)} class = "create-input">
@@ -327,6 +389,11 @@
 		{/each}
 		<button on:click={addContHandler}>add contestant</button>
 		<p><br/></p>
+		<!--Cast data import-->
+		<label class = "input-label">
+			<input accept=".csv" bind:files={inputFiles} type="file" on:change={csvInputHandler} id="selectedFile2" style="display:none;">
+			<p class = "fileupload">Cast Upload</p>
+		</label> 
 		<!--Export file creation & download-->
 		<a href={exportURL} style="display:none" id="downloadLink" download = {exportFileName}>.</a>
 		<span>Filename:</span>
