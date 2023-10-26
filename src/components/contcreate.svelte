@@ -122,25 +122,26 @@
 			creationConts = creationConts;//direct assignment needed to update svelte reactivity
 		});
 	}
-    const downloadExport = () => {
-		contExportData = numConts.toString() + "\n";
-		for (let i = 0; i < creationConts.length; i++){
-			//'@' used as separator for csv
-			contExportData += creationConts[i].getImage() + "@";
-			contExportData += creationConts[i].getName() + "@";
-			contExportData += creationConts[i].getPronoun() + "@";
-			contExportData += creationConts[i].getObjpronoun() + "@";
-			contExportData += creationConts[i].getPospronoun() + "\n";
-		}
-		exportBlob = new Blob([contExportData], {type: "text/csv"});
-		exportURL = window.URL.createObjectURL(exportBlob);
-		if(exportFileName == ""){//if no filename is entered, default to "cast"
-			exportFileName = "cast";
-		}
-		if(exportFileName.includes(".")){
-			exportFileName = exportFileName.substring(0,exportFileName.indexOf("."));
-		}
-		document.getElementById("downloadLink").click();
+	
+    const downloadExport = async () => {
+		let result = await downloadPrep();
+		document.getElementById("downloadLink").click();//when this was syncronous, the file would download before the data was ready. not sure how
+	}
+
+	const downloadPrep = () => {
+		return new Promise(()=>{
+			contExportData = numConts.toString() + "\n";
+			for (let i = 0; i < creationConts.length; i++){
+				//'@' used as separator for csv
+				contExportData += creationConts[i].getImage() + "@";
+				contExportData += creationConts[i].getName() + "@";
+				contExportData += creationConts[i].getPronoun() + "@";
+				contExportData += creationConts[i].getObjpronoun() + "@";
+				contExportData += creationConts[i].getPospronoun() + "\n";
+			}
+			exportBlob = new Blob([contExportData], {type: "text/csv"});
+			exportURL = window.URL.createObjectURL(exportBlob);
+			})
 	}
 
 	const csvInputHandler = () => {
