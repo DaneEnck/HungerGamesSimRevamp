@@ -31,7 +31,8 @@ export default function hungerGames(contestants:Array<Contestant|Group>,contCopy
         let str: string;
         let randint: number;
         //chance to interupt item usage w/ random multi event
-        if(contCopy[i].getItems().length != 0 && contCopy.length >= 2 && Math.random() < 0.33){
+        //TODO: figure out why this happens so much (something wrong or bad luck?)
+        if(contCopy[i].getItems().length != 0 && contCopy.length >= 2 && Math.random() < 0.1){
             do{
                 randint = Math.floor(Math.random()*contCopy.length);
             }while(randint == i);

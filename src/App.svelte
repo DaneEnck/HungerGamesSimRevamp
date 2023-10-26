@@ -156,6 +156,7 @@
 
 </script>
 
+<!-- TODO: turn rest of menus into components-->
 <main>
 	<h1>Hunger Games Simulator: Revamped</h1>
 	<!--Character selection screen-->

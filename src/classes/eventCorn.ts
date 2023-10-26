@@ -5,6 +5,8 @@ import itemList, { item, craftItemList} from "./item";
 import { combat } from "./eventMulti";
 import type EventStruct from "./eventStruct";
 
+//TODO: add more events
+
 //solo events only used at start of game
 export const cornSoloList:Array<Function> = [
     function(x: Contestant):EventStruct{

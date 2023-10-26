@@ -9,6 +9,8 @@ import { craftItemList } from "./item";
 import type EventStruct from './eventStruct';
 
 //events used for individual groups
+//TODO: add betrayal events
+//TODO: add togglable romance events
 let groupList: Array<Function> = [
     function(x: Group):EventStruct{
         let thewep:weapon = wepList[Math.floor(Math.random() * wepList.length)];
