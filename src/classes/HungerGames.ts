@@ -11,6 +11,7 @@ import groupCreateList from './eventGroupCreate';
 import { cornSoloList } from './eventCorn';
 import { cornMultiList } from './eventCorn';
 import type EventStruct from './eventStruct';
+import { groupBetrayList } from './eventGroup';
 
 let endCounter = 3;
 
@@ -134,8 +135,15 @@ export default function hungerGames(parties:Array<Contestant|Group>,partyCopy:Ar
                     partyCopy.splice(randcont1,1);
                 }
                 else{
-                    eventint = Math.floor(Math.random()*groupList.length);
-                    buildarr.push(groupList[eventint](partyCopy[randcont1]));
+                    //10% chance of betrayal event
+                    if(randnum < 0.1){
+                        eventint = Math.floor(Math.random()*groupBetrayList.length);
+                        buildarr.push(groupBetrayList[eventint](partyCopy[randcont1]));
+                    }
+                    else{
+                        eventint = Math.floor(Math.random()*groupList.length);
+                        buildarr.push(groupList[eventint](partyCopy[randcont1]));
+                    }
                     partyCopy.splice(randcont1,1);
                 }
             }

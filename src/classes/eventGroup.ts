@@ -7,6 +7,7 @@ import { item } from "./item";
 import Group from "./group";
 import { craftItemList } from "./item";
 import type EventStruct from './eventStruct';
+import { combat } from './eventMulti';
 
 //events used for individual groups
 //TODO: add betrayal events
@@ -110,6 +111,26 @@ let groupList: Array<Function> = [
     function(x:Group):EventStruct{
         x.addItem(itemClone(craftItemList[3]));
         return {images:x.getImage(),main:x.getName() + " pick berries",combat:[]};
+    }
+]
+
+//events used for individual groups that break up the group and/or cause infighting
+//TODO: add more events
+export let groupBetrayList: Array<Function> = [
+    function(x: Group):EventStruct{
+        let build:string;
+        let randnum = Math.floor(Math.random() * x.getConts().length);
+        let randcont = x.getConts()[randnum];
+        if(x.getConts().length == 2){
+            //3-randnum will be the index of the other contestant
+            build = randcont.getName() + " has had enough of " + x.getConts[3-randnum].getName() + " and attacks " + x.getConts[3-randnum].getObjpronoun() + "!";
+            return {images:x.getImage(),main:build,combat:combat(randcont,x.getConts()[3-randnum])};
+        }
+        else{
+            x.loseMember(randnum);
+            build = randcont.getName() + " has had enough of " + x.getName() + " and attacks them!";
+            return {images:randcont.getImage().concat(x.getImage()),main:build,combat:combat(randcont,x)};
+        }
     }
 ]
 

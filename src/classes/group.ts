@@ -74,7 +74,8 @@ export default class Group{
         this.ppl.push(x);
     }
 
-    loseMember(x:Contestant, y: number):void{
+    loseMember(y: number):void{
+        this.ppl[y].setIsInGroup(false);
         this.ppl.splice(y,1);
     }
     
