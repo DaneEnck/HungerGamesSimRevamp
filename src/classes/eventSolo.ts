@@ -9,6 +9,7 @@ import type EventStruct from './eventStruct';
 
 //events used for individual contestants
 let soloList: Array<Function> = [
+    //contestant recieves random weapon from sponsor
     function(x: Contestant):EventStruct{
         let thewep:weapon = wepList[Math.floor(Math.random() * wepList.length)];
         if(x.newWeapon(thewep)){
@@ -18,11 +19,13 @@ let soloList: Array<Function> = [
             return {images:x.getImage(),main:x.getName() + " recieves a " + thewep.getName() + " from a sponsor, but keeps " + x.getPospronoun() + " current weapon",combat:[]};
         }
     },
+    //contestant recieves random item from sponsor
     function(x: Contestant):EventStruct{
         let theitem:item = itemList[Math.floor(Math.random() * itemList.length)]
         x.addItem(itemClone(theitem));
         return {images:x.getImage(),main:x.getName() + " recieves a " + theitem.getName() + " from a sponsor",combat:[]};
     },
+    //contestant attempts to hunt
     function(x: Contestant):EventStruct{
         let randnum = Math.random();
         let build = x.getName() + " goes hunting"
@@ -38,6 +41,7 @@ let soloList: Array<Function> = [
         }
         return {images:x.getImage(),main:build,combat:[]};
     },
+    //contestant attempts to fish
     function(x:Contestant):EventStruct{
         let randnum = Math.random();
         let build = x.getName() + " tries to catch fish";
@@ -55,13 +59,16 @@ let soloList: Array<Function> = [
         }
         return {images:x.getImage(),main:build,combat:[]};
     },
+    //contestant questions their sanity
     function(x:Contestant):EventStruct{
         return {images:x.getImage(),main: x.getName() + " questions " + x.getPospronoun() + " sanity",combat:[]};
     },
+    //contestant finds fruit tree
     function(x:Contestant):EventStruct{
         x.addItem(itemClone(craftItemList[2]));
         return {images:x.getImage(),main:x.getName() + " finds a fruit tree and collects some fruit",combat:[]};
     },
+    //contestant crafts spear
     function(x:Contestant):EventStruct{
         if (x.newWeapon(craftWeaponList[0])){
             return {images:x.getImage(), main:x.getName() + " crafts a wooden spear",combat:[]};
@@ -70,9 +77,11 @@ let soloList: Array<Function> = [
             return soloList[Math.floor(Math.random() * soloList.length)](x);
         }
     },
+    //contestant builds a fire
     function(x:Contestant):EventStruct{
         return {images:x.getImage(),main: x.getName() + " builds a fire",combat:[]};
     },
+    //contestant attempts to climb tree to look around
     function(x:Contestant):EventStruct{
         let randnum = Math.random()
         if(randnum < 0.5){
@@ -87,6 +96,7 @@ let soloList: Array<Function> = [
             return {images: x.getImage(),main:x.getName() + " climbs a tree to get a vantage point, but slips and falls, breaking " + x.getPospronoun() + " neck",combat:[]};   
         }
     },
+    //contestant picks berries
     function(x:Contestant):EventStruct{
         x.addItem(itemClone(craftItemList[3]));
         return {images:x.getImage(),main: x.getName() + " picks some berries",combat:[]};

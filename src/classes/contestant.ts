@@ -20,7 +20,7 @@ export default class Contestant{
     items: Array<item>;
     isInGroup: boolean;
     image: string;
-    pronounCustomToggle: boolean;
+    pronounCustomToggle: boolean; //used to switch between dropdown and text inputs in cont creation menu
 
     constructor(theName: string, thePronoun: string, theObjpronoun:string, thePospronoun: string, theImage: string){
         this.name = theName;
@@ -131,6 +131,7 @@ export default class Contestant{
         return this.wep;
     }
 
+    //if new weapon is better, replace and return true, otherwise keep current weapon and return false
     newWeapon(x: weapon):boolean{
         if (x.getHitAdd() > this.wep.getHitAdd()){
             this.wep = x;
@@ -167,6 +168,7 @@ export default class Contestant{
         return this.isInGroup;
     }
 
+    //passed a singular and plural string, returns the correct one based on pronoun
     verbSwitchPro(x:string,y:string):string{
         if(this.pronoun == "they"){
             return y;
@@ -176,10 +178,12 @@ export default class Contestant{
         }
     }
 
+    //passed a singular and plural string, returns the correct one based on whether object is contestant or group (polymorphic w/ group object)
     verbSwitchName(x:string,y:string):string{
         return x;
     }
 
+    //TODO: improve type checking so this isn't needed
     getString():string{
         return "Error: getString called on a solo contestant";
     }

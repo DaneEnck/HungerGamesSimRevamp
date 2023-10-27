@@ -9,9 +9,11 @@ import type EventStruct from './eventStruct';
 //TODO: add more events
 //TODO: add item looting to non combat lethal events
 let multiList: Array<Function> = [
+    //two parties fight, kind of a placeholder unsure if this will be kept
     function(x: Contestant|Group, y: Contestant|Group):EventStruct{
         return {images:x.getImage().concat(y.getImage()),main: x.getName() + " fights " + y.getName(),combat:combat(x,y)};
     },
+    //party one sees party two, either attacks or retreats
     function(x: Contestant|Group, y: Contestant|Group):EventStruct{
         let build = x.getName() + x.verbSwitchName(" spots "," spot ") + y.getName() + " from a distance. ";
         if (Math.random() < 0.5){
@@ -23,6 +25,7 @@ let multiList: Array<Function> = [
             return {images:x.getImage().concat(y.getImage()),main:build,combat:combat(x,y)};
         }
     },
+    //party one attempts to steal from party two
     function(x: Contestant|Group, y: Contestant|Group):EventStruct{
         let randnum = Math.random();
         if(y.getItems().length == 0){
@@ -38,6 +41,7 @@ let multiList: Array<Function> = [
             return {images:x.getImage().concat(y.getImage()),main:x.getName() + x.verbSwitchName(" tries "," try ") + " to steal supplies from " + y.getName() + ", but get caught!",combat:combat(y,x)};
         }
     },
+    //party one attempts to sneak attack party two
     function(x: Contestant|Group, y: Contestant|Group):EventStruct{
         if(Math.random() < 0.5){
             if(y instanceof Contestant){
@@ -54,6 +58,7 @@ let multiList: Array<Function> = [
             return {images:x.getImage().concat(y.getImage()),main:x.getName() + x.verbSwitchName(" tries "," try ") + "to sneak up on " + y.getName() + ", but " + y.getPronoun() + y.verbSwitchPro(" is "," are ") + " woken up by the footsteps and" + y.verbSwitchPro(" fights "," fight ") + "back!",combat:combat(y,x)};
         }
     },
+    //party one charges party two
     function(x: Contestant|Group, y: Contestant|Group):EventStruct{
         if(Math.random() < 0.5){
             if(Math.random() < 0.75){

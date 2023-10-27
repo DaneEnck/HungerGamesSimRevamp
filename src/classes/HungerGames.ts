@@ -50,19 +50,23 @@ export default function hungerGames(parties:Array<Contestant|Group>,partyCopy:Ar
         for (let j = 0; j < (partyCopy[i]).getItems().length; j++){
             itemuse = partyCopy[i].getItems()[j];
             numargs = itemuse.getEvent().length;
+            //self targetting item
             if(numargs == 2){
                 str = itemuse.getEvent()(partyCopy[i],itemuse);
             }
+            //targetting another contestant
             else if(numargs == 3 && partyCopy.length >= 2){
                 do{
                 randint = Math.floor(Math.random()*partyCopy.length);
                 }while(randint == i);
                 str = itemuse.getEvent()(partyCopy[i], partyCopy[randint], itemuse);
             }
+            //failsafe
             else{
                 buildarr.push({images:[],main:"Error: item " + itemuse.getName() + " has invalid number of arguments. or maybe theres too few contestants",combat:[]});
                 break;
             }
+            //use item if condition in item function is met
             if(str != "false"){
                 if(numargs == 2){
                     buildarr.push({images:partyCopy[i].getImage(),main:str,combat:[]});
@@ -129,11 +133,13 @@ export default function hungerGames(parties:Array<Contestant|Group>,partyCopy:Ar
             }
             else if(partyCopy.length == 1 || randnum < 0.5){ //solo event
                 randcont1 = Math.floor(Math.random()*partyCopy.length);
+                //individual
                 if(partyCopy[randcont1] instanceof Contestant){
                     eventint = Math.floor(Math.random()*soloList.length);
                     buildarr.push(soloList[eventint](partyCopy[randcont1]));
                     partyCopy.splice(randcont1,1);
                 }
+                //group
                 else{
                     //10% chance of betrayal event
                     if(randnum < 0.1){
