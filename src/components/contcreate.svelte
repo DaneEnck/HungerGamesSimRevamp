@@ -140,7 +140,12 @@
 		if(exportFileName.includes(".")){
 			exportFileName = exportFileName.substring(0,exportFileName.indexOf("."));
 		}
-		document.getElementById("downloadLink").click();
+		const a = document.createElement('a')
+		a.href = exportURL
+		a.download = exportFileName
+		document.body.appendChild(a)
+		a.click()
+		document.body.removeChild(a)
 	}
 
 	const csvInputHandler = () => {
@@ -237,7 +242,6 @@
     <p class = "fileupload">Cast Upload</p>
 </label> 
 <!--Export file creation & download-->
-<a href={exportURL} style="display:none" id="downloadLink" download = {exportFileName}>.</a>
 <span>Filename:</span>
 <input type = "text" bind:value={exportFileName}>
 <button on:click={downloadExport}>Download</button>
