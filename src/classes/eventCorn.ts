@@ -2,7 +2,7 @@ import Contestant from "./contestant";
 import Group from "./group";
 import wepList, { craftWeaponList, weapon } from "./weapon";
 import itemList, { item, craftItemList} from "./item";
-import { combat } from "./eventMulti";
+import { combat } from "./eventFuncs";
 import type EventStruct from "./eventStruct";
 
 //TODO: add more events
