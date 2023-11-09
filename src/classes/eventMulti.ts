@@ -10,10 +10,6 @@ import { combat } from "./eventFuncs";
 //TODO: add more events
 //TODO: add item looting to non combat lethal events
 let multiList: Array<Function> = [
-    //two parties fight, kind of a placeholder unsure if this will be kept
-    function(x: Contestant|Group, y: Contestant|Group):EventStruct{
-        return {images:x.getImage().concat(y.getImage()),main: x.getName() + " fights " + y.getName(),combat:combat(x,y)};
-    },
     //party one sees party two, either attacks or retreats
     function(x: Contestant|Group, y: Contestant|Group):EventStruct{
         let build = x.getName() + x.verbSwitchName(" spots "," spot ") + y.getName() + " from a distance. ";
