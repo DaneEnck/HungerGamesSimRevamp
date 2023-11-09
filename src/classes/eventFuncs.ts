@@ -565,9 +565,6 @@ export function combat(x: Contestant|Group, y: Contestant|Group):string[]{
             }
         }
     }
-    //i have no fucking clue why this needs to be here to work, you can see the other returns
-    //i figured out the problem, hopefully i actually shouldnt need this here anymore
-    build.push("IF YOU CAN SEE THIS, THE COMBAT LOOP IS FUCKED UP");
-    build.push("IF YOU CAN SEE THIS, THE COMBAT LOOP IS FUCKED UP");
+    build.push("ERROR: combat loop exited without returning");
     return build;
 }
