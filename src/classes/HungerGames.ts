@@ -13,6 +13,8 @@ import { groupBetrayList } from './eventGroup';
 
 let endCounter = 3;
 
+let DEBUG_LOG_EVENTS = true;
+
 //returns an array of EventStructs, each representing a single event
 export default function hungerGames(parties:Array<Contestant|Group>,partyCopy:Array<Contestant|Group>,numConts:number,day:number):EventStruct[]{
     let buildarr:EventStruct[] = []
@@ -85,6 +87,9 @@ export default function hungerGames(parties:Array<Contestant|Group>,partyCopy:Ar
                 }
                 else{
                     buildarr.push({images:[],main:"Error: invalid number of arguments on item " + itemuse.getName(),combat:[]})
+                }
+                if(DEBUG_LOG_EVENTS){
+                    console.log(buildarr[buildarr.length-1].main);
                 }
                 break;
             }
@@ -180,8 +185,13 @@ export default function hungerGames(parties:Array<Contestant|Group>,partyCopy:Ar
                 partyCopy.splice(Math.min(randcont1,randcont2),1);
             }
         }
+        if(DEBUG_LOG_EVENTS){
+            console.log(buildarr[buildarr.length-1].main);
+        }
     }
-    console.log("\n");
+    if(DEBUG_LOG_EVENTS){
+        console.log("\n");
+    }
     //delete groups with no living members or one living member
     for(let i = numConts; i < parties.length; i++){
         let temp = parties[i];
