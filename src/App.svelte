@@ -5,6 +5,7 @@
 	import hungerGames from './classes/HungerGames';
 	import type EventStruct from './classes/eventStruct';
 	import Contcreate from './components/contcreate.svelte';
+  import Maingame from './components/maingame.svelte';
 	/*
 		General Vocabulary Overview:
 		Contestant - a single character
@@ -37,7 +38,7 @@
 
 	let selectBinds:string[] = [];//used to store the value of the pronoun select dropdowns
 
-	let combatDetailToggle = true;//used to toggle between multi line & single line combat description
+	
 
 	for(let i = 0; i < numConts; i++){
 		selectBinds.push("1");
@@ -166,47 +167,7 @@
 		<button on:click={creationEndHandler}>Start Game!</button>
 	<!--Main game display, shows list of events and activities of the characters-->
 	{:else if toggle == 1}
-		<!--Combat detail toggle-->
-		<h4>
-			<input type="checkbox" bind:checked={combatDetailToggle}>
-			Show combat details
-		</h4>
-		<p><br/></p>
-		<!--Day header-->
-		<h4>
-			{#if day - 1 == 0}
-				The Cornucopia
-			{:else}
-				Day {day - 1}
-			{/if}
-		</h4>
-		<p><br/></p>
-		<!--Event loop-->
-		{#each events as event,i}
-			<!--Images-->
-			<div style="margin:auto">
-				{#each event.images as thing}
-					<img src={thing} alt = "img error" class = "create-pic">
-				{/each}
-			</div>
-			<!--Main content-->
-			<p>{event.main}</p>
-			<!--Combat (detailed)-->
-			{#if combatDetailToggle}
-				{#each event.combat as thing, m}
-					{#if m != event.combat.length -1}
-						<p style="font-size:12px">{thing}</p>
-					{/if}
-				{/each}
-			<!--Combat (single line)-->
-			{:else}
-				{#each event.combat as thing, m}
-					{#if m == event.combat.length - 1}
-						<p style="font-size:12px">{thing}</p>
-					{/if}
-				{/each}
-			{/if}
-		{/each}
+		<Maingame bind:events = {events} bind:day = {day}/>
 		<button on:click={runDay}>next day</button>
 		<button on:click={prepDisplay}>view contestants</button>
 	<!--Winner screen, endimgs/endstr determined in runDay function-->
