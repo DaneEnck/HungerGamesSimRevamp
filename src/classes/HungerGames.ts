@@ -13,7 +13,7 @@ import { groupBetrayList } from './eventGroup';
 
 let endCounter = 3;
 
-let DEBUG_LOG_EVENTS = true;
+let DEBUG_LOG_EVENTS = false;
 
 //returns an array of EventStructs, each representing a single event
 export default function hungerGames(parties:Array<Contestant|Group>,partyCopy:Array<Contestant|Group>,numConts:number,day:number):EventStruct[]{
