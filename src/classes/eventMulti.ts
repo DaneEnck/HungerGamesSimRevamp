@@ -5,6 +5,7 @@ import { item } from "./item";
 import Group from "./group";
 import type EventStruct from './eventStruct';
 import { combat } from "./eventFuncs";
+import { capitalize } from "./eventFuncs";
 
 //events where two parties interact; all must be compatible with both Contestant and Group in all instances!
 //TODO: add more events
@@ -14,11 +15,11 @@ let multiList: Array<Function> = [
     function(x: Contestant|Group, y: Contestant|Group):EventStruct{
         let build = x.getName() + x.verbSwitchName(" spots "," spot ") + y.getName() + " from a distance. ";
         if (Math.random() < 0.5){
-            build += x.getPronoun() + " " + x.verbSwitchPro("decides","decide") + " to retreat";
+            build += capitalize(x.getPronoun()) + " " + x.verbSwitchPro("decides","decide") + " to retreat";
             return {images:x.getImage().concat(y.getImage()),main:build,combat:[]};
         } 
         else{
-            build += x.getPronoun() + " " + x.verbSwitchPro("decides","decide") + " to attack!";
+            build += capitalize(x.getPronoun()) + " " + x.verbSwitchPro("decides","decide") + " to attack!";
             return {images:x.getImage().concat(y.getImage()),main:build,combat:combat(x,y)};
         }
     },
@@ -30,9 +31,10 @@ let multiList: Array<Function> = [
         }
         if(randnum < 0.5){
             let randnum2 = Math.floor(Math.random() * y.getItems().length);
+            let lostItem = y.getItems()[randnum2];
             x.addItem(y.getItems()[randnum2]);
             y.loseItem(randnum2);
-            return {images:x.getImage().concat(y.getImage()),main:x.getName() + x.verbSwitchName(" steals "," steal ") + "supplies from " + y.getName(),combat:[]};
+            return {images:x.getImage().concat(y.getImage()),main:x.getName() + x.verbSwitchName(" steals "," steal ") + " a " + lostItem.getName() + " from " + y.getName(),combat:[]};
         }
         else{
             return {images:x.getImage().concat(y.getImage()),main:x.getName() + x.verbSwitchName(" tries "," try ") + " to steal supplies from " + y.getName() + ", but get caught!",combat:combat(y,x)};

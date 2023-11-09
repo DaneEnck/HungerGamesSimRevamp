@@ -6,6 +6,7 @@ import itemList, { itemClone } from "./item";
 import { item } from "./item";
 import { craftItemList } from "./item";
 import type EventStruct from './eventStruct';
+import { capitalize } from "./eventFuncs";
 
 //events used for individual contestants
 let soloList: Array<Function> = [
@@ -33,10 +34,10 @@ let soloList: Array<Function> = [
             build += ", but does not find anything"
         }
         else if (randnum < 0.66){
-            build += ". " + x.getObjpronoun() + " " + x.verbSwitchPro("spots","spot") + " a squirrel, but it runs off before " + x.getPronoun() + " can get close";
+            build += ". " + capitalize(x.getObjpronoun()) + " " + x.verbSwitchPro("spots","spot") + " a squirrel, but it runs off before " + x.getPronoun() + " can get close";
         }
         else{
-            build += ". " + x.getObjpronoun() + " " + x.verbSwitchPro("spots","spot") + "a squirrel and catch it successfully!";
+            build += ". " + capitalize(x.getObjpronoun()) + " " + x.verbSwitchPro("spots","spot") + "a squirrel and catch it successfully!";
             x.addItem(itemClone(craftItemList[0]));
         }
         return {images:x.getImage(),main:build,combat:[]};
