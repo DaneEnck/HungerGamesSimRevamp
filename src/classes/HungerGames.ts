@@ -66,6 +66,9 @@ export default function hungerGames(parties:Array<Contestant|Group>,partyCopy:Ar
             }
             //use item if condition in item function is met
             if(str != "false"){
+                if(itemuse.getUses() == 0){
+                    partyCopy[i].getItems().splice(j,1);
+                }
                 if(numargs == 2){
                     buildarr.push({images:partyCopy[i].getImage(),main:str,combat:[]});
                     partyCopy.splice(i,1);
@@ -82,9 +85,6 @@ export default function hungerGames(parties:Array<Contestant|Group>,partyCopy:Ar
                 }
                 else{
                     buildarr.push({images:[],main:"Error: invalid number of arguments on item " + itemuse.getName(),combat:[]})
-                }
-                if(itemuse.getUses() == 0){
-                    partyCopy[i].getItems().splice(j,1);
                 }
                 break;
             }
