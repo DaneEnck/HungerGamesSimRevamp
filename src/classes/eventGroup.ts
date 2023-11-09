@@ -7,7 +7,7 @@ import { item } from "./item";
 import Group from "./group";
 import { craftItemList } from "./item";
 import type EventStruct from './eventStruct';
-import { combat } from './eventMulti';
+import { combat } from './eventFuncs';
 
 //events used for individual groups
 //TODO: add betrayal events
