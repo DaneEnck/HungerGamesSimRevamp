@@ -63,7 +63,7 @@ let multiList: Array<Function> = [
             else{
                 if (y instanceof Contestant){
                     y.downCond(1);
-                    return {images:x.getImage().concat(y.getImage()),main:x.getName() + x.verbSwitchName(" charges "," charge ") + "at " + y.getName() + ". " + y.getPronoun() + y.verbSwitchPro(" tries "," try ") + "to run away, but " + y.getPronoun() + " trip and fall hard!",combat:combat(x,y)};
+                    return {images:x.getImage().concat(y.getImage()),main:x.getName() + x.verbSwitchName(" charges "," charge ") + "at " + y.getName() + ". " + capitalize(y.getPronoun()) + y.verbSwitchPro(" tries "," try ") + "to run away, but " + y.getPronoun() + " trip and fall hard!",combat:combat(x,y)};
                 }
                 else{
                     let randcont = Math.floor(Math.random() * y.getConts().length);
