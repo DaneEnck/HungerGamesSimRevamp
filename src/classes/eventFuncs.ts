@@ -4,6 +4,11 @@ import { item } from "./item";
 import { weapon } from "./weapon";
 import { Condition } from "./contestant";
 
+//capitalizes first letter of a string
+export function capitalize(x:string):string{
+    return x.charAt(0).toUpperCase() + x.slice(1);
+}
+
 /*performs combat between two parties, either being a contestant or a group
 every member takes one attack against a random member of the opposing party, dealing no or some damage (applied to cond)
 each damage oppurtunity is decided by a randnum from 0 to 1. <0.4 misses (no damage), >0.9 is instantly lethal, in between deals varying damage levels
