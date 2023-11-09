@@ -83,11 +83,13 @@
 	//handler for Start Game button
 	const creationEndHandler = () => {
 		//copy contestants from creationConts to parties
-		for(let i = 0; i < numConts; i++){
-			if(creationConts[i].getName() == ""){
-				creationConts[i].setName("Contestant " + (i + 1).toString());
+		if(parties.length == 0){
+			for(let i = 0; i < numConts; i++){
+				if(creationConts[i].getName() == ""){
+					creationConts[i].setName("Contestant " + (i + 1).toString());
+				}
+				parties.push(creationConts[i]);
 			}
-			parties.push(creationConts[i]);
 		}
 		toggle = 1;
 		runDay();
