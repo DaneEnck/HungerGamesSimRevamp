@@ -11,7 +11,7 @@
 		Group - a collection of two or more characters operating together
 		Party - either a contestant or a group
 	*/
-	let toggle = 0; //0 = character creation, 1 = main game, 2 = winner screen, 3 = contestant overview
+	let toggle = 0; //0 = character creation, 1 = main game, 2 = winner screen, 3 = contestant overview, 4 = about screen
 
 	let creationConts = new Array<Contestant>(); //stores all contestants created during character creation
 
