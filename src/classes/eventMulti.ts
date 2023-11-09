@@ -31,9 +31,10 @@ let multiList: Array<Function> = [
         }
         if(randnum < 0.5){
             let randnum2 = Math.floor(Math.random() * y.getItems().length);
+            let lostItem = y.getItems()[randnum2];
             x.addItem(y.getItems()[randnum2]);
             y.loseItem(randnum2);
-            return {images:x.getImage().concat(y.getImage()),main:x.getName() + x.verbSwitchName(" steals "," steal ") + "supplies from " + y.getName(),combat:[]};
+            return {images:x.getImage().concat(y.getImage()),main:x.getName() + x.verbSwitchName(" steals "," steal ") + "a " + lostItem.getName() + " from " + y.getName(),combat:[]};
         }
         else{
             return {images:x.getImage().concat(y.getImage()),main:x.getName() + x.verbSwitchName(" tries "," try ") + " to steal supplies from " + y.getName() + ", but get caught!",combat:combat(y,x)};
