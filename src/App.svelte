@@ -4,7 +4,6 @@
 	import Group from './classes/group';
 	import hungerGames from './classes/HungerGames';
 	import type EventStruct from './classes/eventStruct';
-	import Papa from 'papaparse';
 	import Contcreate from './components/contcreate.svelte';
 	/*
 		General Vocabulary Overview:
