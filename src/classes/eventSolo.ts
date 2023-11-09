@@ -1,5 +1,4 @@
 import Contestant from "./contestant";
-import { Condition } from "./contestant";
 import wepList, { craftWeaponList } from "./weapon";
 import { weapon } from "./weapon";
 import itemList, { itemClone } from "./item";

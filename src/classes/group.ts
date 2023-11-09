@@ -1,6 +1,5 @@
 import Contestant from './contestant';
 import { Condition } from './contestant';
-import { weapon } from './weapon';
 import { item } from './item';
 
 export default class Group{

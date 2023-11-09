@@ -1,12 +1,10 @@
 import Contestant from './contestant';
 import { Condition } from './contestant';
 import Group from './group';
-import wepList from './weapon';
 import soloList from './eventSolo';
 import groupList from './eventGroup';
 import multiList from './eventMulti';
 import { item } from './item';
-import itemList from './item';
 import groupCreateList from './eventGroupCreate';
 import { cornSoloList } from './eventCorn';
 import { cornMultiList } from './eventCorn';

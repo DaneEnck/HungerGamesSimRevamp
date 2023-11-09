@@ -1,9 +1,5 @@
 <script lang="ts">
     import Contestant from '../classes/contestant';
-	import { Condition } from '../classes/contestant';
-	import Group from '../classes/group';
-	import hungerGames from '../classes/HungerGames';
-	import type EventStruct from '../classes/eventStruct';
 	import Papa from 'papaparse';
     export let creationConts
     

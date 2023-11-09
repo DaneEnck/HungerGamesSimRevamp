@@ -1,7 +1,6 @@
 import Contestant from "./contestant";
 import Group from "./group";
 import { item } from "./item";
-import { weapon } from "./weapon";
 import { Condition } from "./contestant";
 
 //capitalizes first letter of a string

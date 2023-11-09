@@ -1,6 +1,4 @@
 import Contestant from "./contestant";
-import { Condition } from "./contestant";
-import { weapon } from "./weapon";
 import Group from "./group";
 
 /*items can be acquired by contestants/groups throughout the game

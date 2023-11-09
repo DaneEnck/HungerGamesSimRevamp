@@ -1,7 +1,4 @@
 import Contestant from "./contestant";
-import { Condition } from "./contestant";
-import { weapon } from "./weapon";
-import { item } from "./item";
 import Group from "./group";
 import type EventStruct from './eventStruct';
 import { combat } from "./eventFuncs";
