@@ -58,7 +58,7 @@ let multiList: Array<Function> = [
     function(x: Contestant|Group, y: Contestant|Group):EventStruct{
         if(Math.random() < 0.5){
             if(Math.random() < 0.75){
-                return {images:x.getImage().concat(y.getImage()),main:x.getName() + x.verbSwitchName(" charges "," charge ") + "at " + y.getName() + ",but " + y.getPronoun() + y.verbSwitchPro(" runs "," run ") + " away!",combat:[]};
+                return {images:x.getImage().concat(y.getImage()),main:x.getName() + x.verbSwitchName(" charges "," charge ") + "at " + y.getName() + ", but " + y.getPronoun() + y.verbSwitchPro(" runs "," run ") + " away!",combat:[]};
             }
             else{
                 if (y instanceof Contestant){
@@ -73,7 +73,7 @@ let multiList: Array<Function> = [
             }
         }
         else{
-            return {images:x.getImage().concat(y.getImage()),main:x.getName() + x.verbSwitchName(" charges "," charge ") + "at " + y.getName() + ",but " + y.getPronoun() + y.verbSwitchPro(" stands "," stand ") + y.getPospronoun() + " ground!",combat:combat(x,y)};
+            return {images:x.getImage().concat(y.getImage()),main:x.getName() + x.verbSwitchName(" charges "," charge ") + "at " + y.getName() + ", but " + y.getPronoun() + y.verbSwitchPro(" stands "," stand ") + y.getPospronoun() + " ground!",combat:combat(x,y)};
         }
     }
 ]
