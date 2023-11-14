@@ -121,7 +121,7 @@ export let groupBetrayList: Array<Function> = [
         let randcont = x.getConts()[randnum];
         if(x.getConts().length == 2){
             //1-randnum will be the index of the other contestant
-            build = randcont.getName() + " has had enough of " + x.getConts[1-randnum].getName() + " and attacks " + x.getConts[1-randnum].getObjpronoun() + "!";
+            build = randcont.getName() + " has had enough of " + x.getConts()[1-randnum].getName() + " and attacks " + x.getConts[1-randnum].getObjpronoun() + "!";
             return {images:x.getImage(),main:build,combat:combat(randcont,x.getConts()[1-randnum])};
         }
         else{
