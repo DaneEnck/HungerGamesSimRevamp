@@ -12,7 +12,7 @@
 		Group - a collection of two or more characters operating together
 		Party - either a contestant or a group
 	*/
-	let toggle = 0; //0 = character creation, 1 = main game, 2 = winner screen, 3 = contestant overview, 4 = about screen
+	let menuToggle = 0; //0 = character creation, 1 = main game, 2 = winner screen, 3 = contestant overview, 4 = about screen
 
 	let creationConts = new Array<Contestant>(); //stores all contestants created during character creation
 
@@ -71,7 +71,7 @@
 				}
 			}
 			endimgs = partyCopy[0].getImage();
-			toggle = 2;
+			menuToggle = 2;
 		}
 		else{
 			events = hungerGames(parties,partyCopy,numConts,day);
@@ -91,7 +91,7 @@
 				parties.push(creationConts[i]);
 			}
 		}
-		toggle = 1;
+		menuToggle = 1;
 		runDay();
 	}
 	
@@ -116,16 +116,16 @@
 		for(let i = numConts; i < parties.length; i++){
 			displayParties.push([parties[i]])
 		}
-		toggle = 3;
+		menuToggle = 3;
 	}
 	//button that exits contestant view screen
 	const backToGame = () => {
-		toggle = 1;
+		menuToggle = 1;
 	}
 	
 	//return to creation menu after complete game, retaining contestant names, images, and pronouns
 	const resetGame = () => {
-		toggle = 0;
+		menuToggle = 0;
 		day = 0;
 		endstr = [];
 		for(let i = 0; i < numConts; i++){
@@ -148,12 +148,12 @@
 
 	//when about button is clicked
 	const aboutHandler = () => {
-		toggle = 4;
+		menuToggle = 4;
 	}
 
 	//when return in about menu is clicked
 	const returnCreationHandler = () => {
-		toggle = 0;
+		menuToggle = 0;
 	}
 
 </script>
@@ -162,18 +162,18 @@
 <main>
 	<h1>Hunger Games Simulator: Revamped</h1>
 	<!--Character selection screen-->
-	{#if toggle == 0}
+	{#if menuToggle == 0}
 		<button on:click={aboutHandler}>About</button>
 		<Contcreate bind:numConts = {numConts} bind:creationConts = {creationConts}/>
 		<!--Game Start-->
 		<button on:click={creationEndHandler}>Start Game!</button>
 	<!--Main game display, shows list of events and activities of the characters-->
-	{:else if toggle == 1}
+	{:else if menuToggle == 1}
 		<Maingame bind:events = {events} bind:day = {day}/>
 		<button on:click={runDay}>next day</button>
 		<button on:click={prepDisplay}>view contestants</button>
 	<!--Winner screen, endimgs/endstr determined in runDay function-->
-	{:else if toggle == 2}
+	{:else if menuToggle == 2}
 		<div style="margin:auto">
 			{#each endimgs as image}
 				<img src={image} alt="img error" class="create-pic">
@@ -184,7 +184,7 @@
 		{/each}
 		<button on:click={resetGame}>new game</button>
 	<!--Contestant overview screen, lists all contestants, their kills, health, and possessions-->
-	{:else if toggle == 3}
+	{:else if menuToggle == 3}
 		<div class = "all-rows">
 		{#each displayParties as displays}
 			{#if displays[0] instanceof Contestant}
@@ -261,7 +261,7 @@
 		{/each}
 		</div>
 		<button on:click={backToGame}>return</button>
-	{:else if toggle == 4}
+	{:else if menuToggle == 4}
 		<p>This website will simulate a battle royale, similar to the Hunger Games, with characters of your choice as the participants.</p>
 		<p>Enter the names, pronouns, and optionally images of the characters you want to participate</p>
 		<p>Then, click start game to begin the simulation</p>
