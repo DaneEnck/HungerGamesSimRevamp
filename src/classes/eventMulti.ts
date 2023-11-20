@@ -43,12 +43,28 @@ let multiList: Array<Function> = [
         if(Math.random() < 0.5){
             if(y instanceof Contestant){
                 y.downCond(99);
-                return {images:x.getImage().concat(y.getImage()),main:x.getName() + x.verbSwitchName(" sneaks "," sneak ") + "up on " + y.getName() + " while " + y.getPronoun() + y.verbSwitchPro(" is "," are ") + " sleeping, and kills " + y.getObjpronoun() + " silently",combat:loot(x,y)};
+                if(x instanceof Contestant){
+                    x.upKills(1);
+                    return {images:x.getImage().concat(y.getImage()),main:x.getName() + " sneaks up on " + y.getName() + " while " + y.getPronoun() + y.verbSwitchPro(" is "," are ") + " sleeping, and kills " + y.getObjpronoun() + " silently",combat:loot(x,y)};
+                }
+                else{
+                    let randnum = Math.floor(Math.random() * x.getConts().length);
+                    x.getConts()[randnum].upKills(1);
+                    return {images:x.getImage().concat(y.getImage()),main:x.getName() + " sneak up on " + y.getName() + " while " + y.getPronoun() + y.verbSwitchPro(" is "," are ") + " sleeping. " + x.getConts()[randnum].getName() + " kills " + y.getObjpronoun() + " silently",combat:loot(x,y)};
+                }       
             }
             else{
                 let randnum = Math.floor(Math.random() * y.getConts().length);
                 y.getConts()[randnum].downCond(99);
-                return {images:x.getImage().concat(y.getImage()),main:x.getName() + x.verbSwitchName(" sneaks "," sneak ") + " up on " + y.getName() + " while they sleep, killing " + y.getConts()[randnum].getName() + " before " + y.getPronoun() + " can wake up. Everyone else is awoken, and they retaliate!",combat:combat(x,y)};
+                if(x instanceof Contestant){
+                    x.upKills(1);
+                    return {images:x.getImage().concat(y.getImage()),main:x.getName() + " sneaks up on " + y.getName() + " while they sleep, killing " + y.getConts()[randnum].getName() + " before " + y.getPronoun() + " can wake up. Everyone else is awoken, and they retaliate!",combat:combat(x,y)};
+                }
+                else{
+                    let randnum2 = Math.floor(Math.random() * x.getConts().length);
+                    x.getConts()[randnum2].upKills(1);
+                    return {images:x.getImage().concat(y.getImage()),main:x.getName() + " sneak up on " + y.getName() + " while they sleep. " + x.getConts()[randnum].getName() + " kills " + y.getConts()[randnum].getName() + " before " + y.getPronoun() + " can wake up. Everyone else is awoken, and they retaliate!",combat:combat(x,y)};
+                }
             }
         }
         else{
