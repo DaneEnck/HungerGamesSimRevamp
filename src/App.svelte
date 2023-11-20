@@ -5,8 +5,9 @@
 	import hungerGames from './classes/HungerGames';
 	import type EventStruct from './classes/eventStruct';
 	import Contcreate from './components/contcreate.svelte';
-  import Maingame from './components/maingame.svelte';
-  import Overview from './components/overview.svelte';
+  	import Maingame from './components/maingame.svelte';
+  	import Overview from './components/overview.svelte';
+	import Debugevent from './components/debugevent.svelte';
 	/*
 		General Vocabulary Overview:
 		Contestant - a single character
@@ -39,7 +40,7 @@
 
 	let selectBinds:string[] = [];//used to store the value of the pronoun select dropdowns
 
-	
+	const EVENT_DEBUG_TOGGLE = false;//if true, adds button that tests every event, printing to console
 
 	for(let i = 0; i < numConts; i++){
 		selectBinds.push("1");
@@ -164,6 +165,9 @@
 	<h1>Hunger Games Simulator: Revamped</h1>
 	<!--Character selection screen-->
 	{#if menuToggle == 0}
+		{#if EVENT_DEBUG_TOGGLE}
+			<Debugevent/>
+		{/if}
 		<button on:click={aboutHandler}>About</button>
 		<Contcreate bind:numConts = {numConts} bind:creationConts = {creationConts}/>
 		<!--Game Start-->
