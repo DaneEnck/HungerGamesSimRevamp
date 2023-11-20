@@ -7,6 +7,7 @@
     import soloList from '../classes/eventSolo';
     import groupList from '../classes/eventGroup';
     import multiList from '../classes/eventMulti';
+    import { groupBetrayList } from '../classes/eventGroup';
 
     //when debug button is clicked
 	const debugHandler = () => {
@@ -113,6 +114,19 @@
                 testGroup1 = new Group([new Contestant("test1" ,"he","him","his","Default.png"),new Contestant("test2" ,"he","him","his","Default.png"),new Contestant("test3" ,"he","him","his","Default.png")],[],"");
                 testGroup2 = new Group([new Contestant("test4" ,"he","him","his","Default.png"),new Contestant("test5" ,"he","him","his","Default.png")],[],"");
                 tempstruct = multiList[i](testGroup1,testGroup2);
+            }
+            console.log(tempstruct.main);
+            console.log(tempstruct.combat);
+        }
+        console.log("---BETRAY EVENT---")
+        for(let i = 0; i < groupBetrayList.length; i++){
+            for (let j = 0; j < 5; j++){
+                testGroup1 = new Group([new Contestant("test1" ,"he","him","his","Default.png"),new Contestant("test2" ,"he","him","his","Default.png")],[],"");
+                tempstruct = groupBetrayList[i](testGroup1);
+            }
+            for (let j = 0; j < 5; j++){
+                testGroup1 = new Group([new Contestant("test1" ,"he","him","his","Default.png"),new Contestant("test2" ,"he","him","his","Default.png"),new Contestant("test3" ,"he","him","his","Default.png")],[],"");
+                tempstruct = groupBetrayList[i](testGroup1);
             }
             console.log(tempstruct.main);
             console.log(tempstruct.combat);
