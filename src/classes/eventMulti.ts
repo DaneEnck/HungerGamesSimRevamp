@@ -63,7 +63,7 @@ let multiList: Array<Function> = [
                 else{
                     let randnum2 = Math.floor(Math.random() * x.getConts().length);
                     x.getConts()[randnum2].upKills(1);
-                    return {images:x.getImage().concat(y.getImage()),main:x.getName() + " sneak up on " + y.getName() + " while they sleep. " + x.getConts()[randnum].getName() + " kills " + y.getConts()[randnum].getName() + " before " + y.getPronoun() + " can wake up. Everyone else is awoken, and they retaliate!",combat:combat(x,y)};
+                    return {images:x.getImage().concat(y.getImage()),main:x.getName() + " sneak up on " + y.getName() + " while they sleep. " + x.getConts()[randnum2].getName() + " kills " + y.getConts()[randnum].getName() + " before " + y.getPronoun() + " can wake up. Everyone else is awoken, and they retaliate!",combat:combat(x,y)};
                 }
             }
         }
