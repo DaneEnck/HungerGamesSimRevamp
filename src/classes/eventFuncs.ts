@@ -8,6 +8,47 @@ export function capitalize(x:string):string{
     return x.charAt(0).toUpperCase() + x.slice(1);
 }
 
+//loots all items from y and gives them to x, returning a multi-line string describing the loot (to be used in the combat field of eventstruct)
+export function loot(x:Contestant|Group, y:Contestant|Group):string[]{
+    let build:string[] = [];
+    let tookweps:Array<number> = [];
+    let contArrX:Contestant[] = [];
+    let contArrY:Contestant[] = [];
+    if (x instanceof Contestant){
+        contArrX = [x];
+    }
+    else{
+        contArrX = x.getConts();
+    }
+    if (y instanceof Contestant){
+        contArrY = [y];
+    }
+    else{
+        contArrY = y.getConts();
+    }
+    for(let k = 0; k < contArrX.length; k++){
+        let wepnum = -1;
+        for(let n = 0; n < contArrY.length; n++){
+            if(!tookweps.includes(n) && contArrX[k].newWeapon(contArrY[n].getWeapon())){//ensure same weapon isn't taken twice
+                wepnum = n;
+                break;
+            }
+        }
+        if(wepnum != -1){//ensure best weapon is acquired
+            build.push(contArrX[k].getName() + " takes " + contArrY[wepnum].getName() + "'s " + contArrY[wepnum].getWeapon().getName() + "\n");
+            tookweps.push(wepnum);
+        }
+    }
+    //loot items
+    while(y.getItems().length > 0){
+        let tempitem:item = y.getItems().pop();
+        x.addItem(tempitem);
+        build.push(x.getName() + x.verbSwitchName(" takes "," take ") + "a " + tempitem.getName() + " from " + y.getName() + "\n");
+    }
+    build.push(x.getName() + x.verbSwitchName(" takes "," take ") + "all of " + y.getName() + "'s items\n");
+    return build;
+}
+
 /*performs combat between two parties, either being a contestant or a group
 every member takes one attack against a random member of the opposing party, dealing no or some damage (applied to cond)
 each damage oppurtunity is decided by a randnum from 0 to 1. <0.4 misses (no damage), >0.9 is instantly lethal, in between deals varying damage levels

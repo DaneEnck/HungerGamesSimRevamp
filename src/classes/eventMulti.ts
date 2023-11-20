@@ -3,6 +3,7 @@ import Group from "./group";
 import type EventStruct from './eventStruct';
 import { combat } from "./eventFuncs";
 import { capitalize } from "./eventFuncs";
+import { loot } from "./eventFuncs";
 
 //events where two parties interact; all must be compatible with both Contestant and Group in all instances!
 //TODO: add more events
@@ -42,7 +43,7 @@ let multiList: Array<Function> = [
         if(Math.random() < 0.5){
             if(y instanceof Contestant){
                 y.downCond(99);
-                return {images:x.getImage().concat(y.getImage()),main:x.getName() + x.verbSwitchName(" sneaks "," sneak ") + "up on " + y.getName() + " while " + y.getPronoun() + y.verbSwitchPro(" is "," are ") + " sleeping, and kills " + y.getObjpronoun() + " silently",combat:[]};
+                return {images:x.getImage().concat(y.getImage()),main:x.getName() + x.verbSwitchName(" sneaks "," sneak ") + "up on " + y.getName() + " while " + y.getPronoun() + y.verbSwitchPro(" is "," are ") + " sleeping, and kills " + y.getObjpronoun() + " silently",combat:loot(x,y)};
             }
             else{
                 let randnum = Math.floor(Math.random() * y.getConts().length);
