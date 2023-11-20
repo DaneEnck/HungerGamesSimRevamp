@@ -14,3 +14,7 @@ To run a local development server, first insall [node.js](https://nodejs.org) if
 Run "npm install" to download dependencies, then run "npm run dev" to launch the local server.
 Development server is then accessed at [localhost:8080](http://localhost:8080).
 
+
+
+A note regarding the irregular activity history prior to November 14 2023:
+I've been pushing changes via the Github extension on Visual Studio code. I have discovered that using this extension, when pushing multiple commits at the same time, the entry in activity menu will have the same message as the most recent commit, leaving out details of the other commits in the push. I will attempt to make the change history easier to view by giving each commit its own push in the future.
