@@ -2,8 +2,9 @@
     import Contestant from '../classes/contestant';
 	import Papa from 'papaparse';
     export let creationConts
+	export let numConts
     
-    export let numConts = 24; //stores all contestants created during character creation
+    let numContsHolder = numConts; //stores all contestants created during character creation
     
     let numContsWarningToggle = false;
 
@@ -24,18 +25,19 @@
     
     //handler for submit button on character creation screen. done through submission instead of immediate reaction to avoid early input during multi digit numbers
 	const submitNumConts = () => {
-		if (numConts == 0){
+		if (numContsHolder == 0){
 			numContsWarningToggle = true;
 		}
 		else{
 			numContsWarningToggle = false;
+			numConts = numContsHolder
 			//shorten parties array to match new number of contestants
-			while(creationConts.length > numConts){
+			while(creationConts.length > numContsHolder){
 				creationConts.pop();
 				selectBinds.pop();
 			}
 			//lengthen parties array to match new number of contestants
-			while(creationConts.length < numConts){
+			while(creationConts.length < numContsHolder){
 				creationConts.push(new Contestant("" ,"he","him","his","Default.png"));
 				selectBinds.push("1");
 			}
@@ -59,14 +61,18 @@
 		creationConts.push(new Contestant("" ,"he","him","his","Default.png"));
 		selectBinds.push("1");
 		numConts = creationConts.length;
+		numContsHolder = numConts;
 		creationConts = creationConts;//direct assignment needed to update svelte reactivity
+		numContsWarningToggle = false;
 	}
 	const removeContHandler = (c:Contestant) => {//when X is clicked on a particular character
 		let val = creationConts.indexOf(c);
 		creationConts.splice(val,1);
 		selectBinds.splice(val,1);
 		numConts = creationConts.length;
+		numContsHolder = numConts;
 		creationConts = creationConts;//direct assignment needed to update svelte reactivity
+		numContsWarningToggle = false;
 	}
 	const imgHandler = (e,c:Contestant) => {
 		if(e.target.value == ""){
@@ -192,7 +198,7 @@
 
 <div class = "num-header">
     <p>Number of contestants: </p>
-    <input type = "text" bind:value={numConts}>
+    <input type = "text" bind:value={numContsHolder}>
     <button on:click={submitNumConts}>submit</button>
 </div>
 {#if numContsWarningToggle}
