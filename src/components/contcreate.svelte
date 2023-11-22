@@ -25,7 +25,7 @@
     
     //handler for submit button on character creation screen. done through submission instead of immediate reaction to avoid early input during multi digit numbers
 	const submitNumConts = () => {
-		if (numContsHolder == 0){
+		if (numContsHolder <= 0){
 			numContsWarningToggle = true;
 		}
 		else{
