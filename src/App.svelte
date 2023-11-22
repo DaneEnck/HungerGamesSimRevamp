@@ -85,13 +85,12 @@
 	//handler for Start Game button
 	const creationEndHandler = () => {
 		//copy contestants from creationConts to parties
-		if(parties.length == 0){
-			for(let i = 0; i < numConts; i++){
-				if(creationConts[i].getName() == ""){
-					creationConts[i].setName("Contestant " + (i + 1).toString());
-				}
-				parties.push(creationConts[i]);
+		parties = [];
+		for(let i = 0; i < numConts; i++){
+			if(creationConts[i].getName() == ""){
+				creationConts[i].setName("Contestant " + (i + 1).toString());
 			}
+			parties.push(creationConts[i]);
 		}
 		menuToggle = 1;
 		runDay();
@@ -145,6 +144,13 @@
 		while(parties.length > numConts){
 			parties.pop();
 			selectBinds.pop();
+		}
+		creationConts = [];
+		for (let i = 0; i < parties.length; i++){//TODO: find a way to do this without type checking
+			let temp = parties[i];
+			if(temp instanceof Contestant){
+				creationConts.push(temp);
+			}
 		}
 	}
 
