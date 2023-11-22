@@ -1,5 +1,8 @@
 <script lang="ts">
     export let displayParties;
+    export let numConts;
+    export let parties;
+    export let endstr;
     import Contestant from '../classes/contestant';
     import { Condition } from '../classes/contestant';
 </script>
@@ -19,6 +22,10 @@
                                 <img src={thing.getImage()[0]} alt="img error" class="create-pic">
                             {/if}
                             <p style = "margin:1px">{thing.getName()}</p>
+                            <!--mark winner if game end--->
+                            {#if endstr.length > 0 && thing.getCond() != Condition.DEAD && parties.length == numConts}
+                                <p style = "margin:1px;color:yellow">WINNER!</p>
+                            {/if}
                             <p style = "margin:1px">{thing.getKills()} kills</p>
                             <!--change text color based on condition-->
                             {#if thing.getCond() == Condition.HEALTHY}
@@ -58,6 +65,10 @@
                     {/each}
                 </div>
                 <p style = "margin:10px">{thing.getName()} are a group</p>
+                <!--mark winner if game end--->
+                {#if endstr.length > 0}
+                    <p style = "margin:1px;color:yellow">WINNER!</p>
+                {/if}
                 <!--items-->
                 {#if thing.getItems().length == 1}
                     <span>Items: {thing.getItems()[0].getName()}</span>

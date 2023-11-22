@@ -188,10 +188,15 @@
 			<p>{line}</p>
 		{/each}
 		<button on:click={resetGame}>new game</button>
+		<button on:click={prepDisplay}>view results</button>
 	<!--Contestant overview screen, lists all contestants, their kills, health, and possessions-->
 	{:else if menuToggle == 3}
-		<Overview bind:displayParties = {displayParties}/>
-		<button on:click={backToGame}>return</button>
+		<Overview bind:displayParties = {displayParties} bind:endstr = {endstr} bind:numConts = {numConts} bind:parties = {parties}/>
+		{#if endstr.length > 0}
+			<button on:click={resetGame}>new game</button>
+		{:else}
+			<button on:click={backToGame}>return</button>
+		{/if}
 	{:else if menuToggle == 4}
 		<p>This website will simulate a battle royale, similar to the Hunger Games, with characters of your choice as the participants.</p>
 		<p>Enter the names, pronouns, and optionally images of the characters you want to participate</p>
