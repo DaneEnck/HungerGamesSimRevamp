@@ -101,6 +101,7 @@ export default function hungerGames(parties:Array<Contestant|Group>,partyCopy:Ar
         let randcont1: number;
         let randcont2: number;
         let randcont3: number;
+        let passes:number = 0;
         randnum = Math.random();
         if(day != 0){
             if(partyCopy.length >= 3 && randnum < 0.33 && partyCopy.length >= numConts / 2){//group creation
@@ -186,6 +187,12 @@ export default function hungerGames(parties:Array<Contestant|Group>,partyCopy:Ar
         }
         if(DEBUG_LOG_EVENTS){
             console.log(buildarr[buildarr.length-1].main);
+        }
+        passes++;
+        if(passes > 1000){
+            console.log("Error: infinite loop in event selection");
+            buildarr = [{images:[],main:"Error: infinite loop in event selection. The game is now unstable!",combat:[]}].concat(buildarr);
+            break;
         }
     }
     if(DEBUG_LOG_EVENTS){
