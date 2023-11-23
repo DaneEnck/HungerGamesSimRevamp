@@ -29,7 +29,7 @@ export default function hungerGames(parties:Array<Contestant|Group>,partyCopy:Ar
     for(let i = 0; i < partyCopy.length; i++){//item usage loop
         let itemuse: item;
         let numargs: number;
-        let str: string;
+        let tempEvent: EventStruct;
         let randint: number;
         //chance to interupt item usage w/ random multi event
         //TODO: figure out why this happens so much (something wrong or bad luck?)
@@ -52,14 +52,14 @@ export default function hungerGames(parties:Array<Contestant|Group>,partyCopy:Ar
             numargs = itemuse.getEvent().length;
             //self targetting item
             if(numargs == 2){
-                str = itemuse.getEvent()(partyCopy[i],itemuse);
+                tempEvent = itemuse.getEvent()(partyCopy[i],itemuse);
             }
             //targetting another contestant
             else if(numargs == 3 && partyCopy.length >= 2){
                 do{
                 randint = Math.floor(Math.random()*partyCopy.length);
                 }while(randint == i);
-                str = itemuse.getEvent()(partyCopy[i], partyCopy[randint], itemuse);
+                tempEvent = itemuse.getEvent()(partyCopy[i], partyCopy[randint], itemuse);
             }
             //failsafe
             else{
@@ -67,17 +67,17 @@ export default function hungerGames(parties:Array<Contestant|Group>,partyCopy:Ar
                 break;
             }
             //use item if condition in item function is met
-            if(str != "false"){
+            if(tempEvent.main != "false"){
                 if(itemuse.getUses() == 0){
                     partyCopy[i].getItems().splice(j,1);
                 }
                 if(numargs == 2){
-                    buildarr.push({images:partyCopy[i].getImage(),main:str,combat:[]});
+                    buildarr.push(tempEvent);
                     partyCopy.splice(i,1);
                     i--;
                 }
                 else if(numargs == 3){
-                    buildarr.push({images:partyCopy[i].getImage().concat(partyCopy[randint].getImage()),main:str,combat:[]});
+                    buildarr.push(tempEvent);
                     partyCopy.splice(Math.max(randint,i),1);
                     partyCopy.splice(Math.min(randint,i),1);
                     i--;

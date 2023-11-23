@@ -1,5 +1,6 @@
 import Contestant from "./contestant";
 import Group from "./group";
+import type EventStruct from "./eventStruct";
 
 /*items can be acquired by contestants/groups throughout the game
 what each individual item does is hard coded in the event field, stored as a function
@@ -44,14 +45,14 @@ export class item{
 
 //general items, can be given by sponsors or called specifically
 let itemList:Array<item> = [
-    new item("medkit",1,function(x:Contestant|Group,y:item):string{
+    new item("medkit",1,function(x:Contestant|Group,y:item):EventStruct{
         if(x instanceof Contestant){
             if(x.getCond() < 4){
                 x.upCond(2);
                 y.downUses(1);
-                return x.getName() + " uses a medkit and is now " + x.getCondName();
+                return {images:x.getImage(),main:x.getName() + " uses a medkit and is now " + x.getCondName(),combat:[]};
             }
-            return "false";
+            return {images:[],main:"false",combat:[]};
         }
         else{
             let tempnum:number = 0;
@@ -67,19 +68,19 @@ let itemList:Array<item> = [
                 }while(tempnum == randnum)
                 x.getConts()[tempnum].upCond(2);
                 y.downUses(1);
-                return x.getConts()[randnum].getName() + " uses a medkit on " + x.getConts()[tempnum].getName() + ". " + x.getConts()[tempnum].getPronoun() + " is now " + x.getConts()[tempnum].getCondName();
+                return {images:x.getImage(),main:x.getConts()[randnum].getName() + " uses a medkit on " + x.getConts()[tempnum].getName() + ". " + x.getConts()[tempnum].getPronoun() + " is now " + x.getConts()[tempnum].getCondName(),combat:[]};
             }
-            return "false";
+            return {images:[],main:"false",combat:[]};
         }
     }),
-    new item("bottle of clean water",1,function(x:Contestant|Group,y:item){
+    new item("bottle of clean water",1,function(x:Contestant|Group,y:item):EventStruct{
         if(x instanceof Contestant){
             if(x.getCond() < 4){
                 x.upCond(1);
                 y.downUses(1);
-                return x.getName() + " drinks some of " + x.getPospronoun() + " water and is now " + x.getCondName();
+                return {images:x.getImage(),main:x.getName() + " drinks some of " + x.getPospronoun() + " water and is now " + x.getCondName(),combat:[]};
             }
-            return "false";
+            return {images:[],main:"false",combat:[]};
         }
         else{
             let tempnum:number = 0;
@@ -91,19 +92,19 @@ let itemList:Array<item> = [
             if(x.getConts()[tempnum].getCond() < 4){
                 x.getConts()[tempnum].upCond(1);
                 y.downUses(1);
-                return x.getConts()[tempnum].getName() + " drinks some of the group's water and is now " + x.getConts()[tempnum].getCondName();
+                return {images:x.getImage(),main:x.getConts()[tempnum].getName() + " drinks some of the group's water and is now " + x.getConts()[tempnum].getCondName(),combat:[]};
             }
-            return "false";
+            return {images:[],main:"false",combat:[]};
         }
     }),
-    new item("food ration",1,function(x:Contestant|Group,y:item){
+    new item("food ration",1,function(x:Contestant|Group,y:item):EventStruct{
         if(x instanceof Contestant){
             if(x.getCond() < 4){
                 x.upCond(1);
                 y.downUses(1);
-                return x.getName() + " eats some of " + x.getPospronoun() + " food ration and is now " + x.getCondName();
+                return {images:x.getImage(),main:x.getName() + " eats some of " + x.getPospronoun() + " food ration and is now " + x.getCondName(),combat:[]};
             }
-            return "false";
+            return {images:[],main:"false",combat:[]};
         }
         else{
             let tempnum:number = 0;
@@ -115,9 +116,9 @@ let itemList:Array<item> = [
             if(x.getConts()[tempnum].getCond() < 4){
                 x.getConts()[tempnum].upCond(1);
                 y.downUses(1);
-                return x.getConts()[tempnum].getName() + " eats some of the group's fresh food and is now " + x.getConts()[tempnum].getCondName();
+                return {images:x.getImage(),main:x.getConts()[tempnum].getName() + " eats some of the group's fresh food and is now " + x.getConts()[tempnum].getCondName(),combat:[]};
             }
-            return "false";
+            return {images:[],main:"false",combat:[]};
         }
     })
 ]
@@ -132,14 +133,14 @@ export default itemList;
 //items which only appear when events call for a particular item (should not be accessed randomly)
 export const craftItemList:Array<item> = [
     //0 meat 1 fish 2 fruit 3 berries
-    new item("meat",1,function(x:Contestant|Group,y:item){
+    new item("meat",1,function(x:Contestant|Group,y:item):EventStruct{
         if(x instanceof Contestant){
             if(x.getCond() < 4){
                 x.upCond(1);
                 y.downUses(1);
-                return x.getName() + " eats some meat and is now " + x.getCondName();
+                return {images:x.getImage(),main:x.getName() + " eats some meat and is now " + x.getCondName(),combat:[]};
             }
-            return "false";
+            return {images:[],main:"false",combat:[]};
         }
         else{
             let tempnum:number = 0;
@@ -151,19 +152,19 @@ export const craftItemList:Array<item> = [
             if(x.getConts()[tempnum].getCond() < 4){
                 x.getConts()[tempnum].upCond(1);
                 y.downUses(1);
-                return x.getConts()[tempnum].getName() + " eats some meat and is now " + x.getConts()[tempnum].getCondName();
+                return {images:x.getImage(),main:x.getConts()[tempnum].getName() + " eats some meat and is now " + x.getConts()[tempnum].getCondName(),combat:[]};
             }
-            return "false";
+            return {images:[],main:"false",combat:[]};
         }
     }),
-    new item("fish",1,function(x:Contestant|Group,y:item){
+    new item("fish",1,function(x:Contestant|Group,y:item):EventStruct{
         if(x instanceof Contestant){
             if(x.getCond() < 4){
                 x.upCond(1);
                 y.downUses(1);
-                return x.getName() + " eats some fish and is now " + x.getCondName();
+                return {images:x.getImage(),main:x.getName() + " eats some fish and is now " + x.getCondName(),combat:[]};
             }
-            return "false";
+            return {images:[],main:"false",combat:[]};
         }
         else{
             let tempnum:number = 0;
@@ -175,19 +176,19 @@ export const craftItemList:Array<item> = [
             if(x.getConts()[tempnum].getCond() < 4){
                 x.getConts()[tempnum].upCond(1);
                 y.downUses(1);
-                return x.getConts()[tempnum].getName() + " eats some fish and is now " + x.getConts()[tempnum].getCondName();
+                return {images:x.getImage(),main:x.getConts()[tempnum].getName() + " eats some fish and is now " + x.getConts()[tempnum].getCondName(),combat:[]};
             }
-            return "false";
+            return {images:[],main:"false",combat:[]};
         }
     }),
-    new item("fruit",1,function(x:Contestant|Group,y:item){
+    new item("fruit",1,function(x:Contestant|Group,y:item):EventStruct{
         if(x instanceof Contestant){
             if(x.getCond() < 4){
                 x.upCond(1);
                 y.downUses(1);
-                return x.getName() + " eats some fruit and is now " + x.getCondName();
+                return {images:x.getImage(),main:x.getName() + " eats some fruit and is now " + x.getCondName(),combat:[]};
             }
-            return "false";
+            return {images:[],main:"false",combat:[]};
         }
         else{
             let tempnum:number = 0;
@@ -199,30 +200,32 @@ export const craftItemList:Array<item> = [
             if(x.getConts()[tempnum].getCond() < 4){
                 x.getConts()[tempnum].upCond(1);
                 y.downUses(1);
-                return x.getConts()[tempnum].getName() + " eats some fruit and is now " + x.getConts()[tempnum].getCondName();
+                return {images:x.getImage(),main:x.getConts()[tempnum].getName() + " eats some fruit and is now " + x.getConts()[tempnum].getCondName(),combat:[]};
             }
-            return "false";
+            return {images:[],main:"false",combat:[]};
         }
     }),
-    new item("berries",1,function(x:Contestant|Group,y:item){
+    new item("berries",1,function(x:Contestant|Group,y:item):EventStruct{
+        let str:string;
         if(x instanceof Contestant){
             if(x.getCond() < 4){
                 y.downUses(1);
                 let randnum = Math.random();
                 if (randnum < 0.6){
                     x.upCond(1);
-                    return x.getName() + " eats some berries and is now " + x.getCondName();
+                    str = x.getName() + " eats some berries and is now " + x.getCondName();
                 }
                 else if (randnum < 0.9){
                     x.downCond(1);
-                    return x.getName() + " eats some berries, but they're poisonous! " + x.getPronoun() + x.verbSwitchPro(" is "," are ") + " now " + x.getCondName();
+                    str = x.getName() + " eats some berries, but they're poisonous! " + x.getPronoun() + x.verbSwitchPro(" is "," are ") + " now " + x.getCondName();
                 }
                 else{
                     x.downCond(99); //lol
-                    return x.getName() + " eats some berries, but they're extremely poisonous, killing " + x.getObjpronoun() + " instantly!";
+                    str = x.getName() + " eats some berries, but they're extremely poisonous, killing " + x.getObjpronoun() + " instantly!";
                 }
+                return {images:x.getImage(),main:str,combat:[]};
             }
-            return "false";
+            return {images:[],main:"false",combat:[]};
         }
         else{
             let tempnum:number = 0;
@@ -236,18 +239,19 @@ export const craftItemList:Array<item> = [
                 let randnum = Math.random();
                 if (randnum < 0.6){
                     x.getConts()[tempnum].upCond(1);
-                    return x.getConts()[tempnum].getName() + " eats some berries and is now " + x.getConts()[tempnum].getCondName();
+                    str = x.getConts()[tempnum].getName() + " eats some berries and is now " + x.getConts()[tempnum].getCondName();
                 }
                 else if (randnum < 0.9){
                     x.getConts()[tempnum].downCond(1);
-                    return x.getConts()[tempnum].getName() + " eats some berries, but they're poisonous! " + x.getConts()[tempnum].getPronoun() + x.getConts()[tempnum].verbSwitchPro(" is "," are ") + " now " + x.getConts()[tempnum].getCondName();
+                    str = x.getConts()[tempnum].getName() + " eats some berries, but they're poisonous! " + x.getConts()[tempnum].getPronoun() + x.getConts()[tempnum].verbSwitchPro(" is "," are ") + " now " + x.getConts()[tempnum].getCondName();
                 }
                 else{
                     x.getConts()[tempnum].downCond(99); //lol
-                    return x.getConts()[tempnum].getName() + " eats some berries, but they're extremely poisonous, killing " + x.getConts()[tempnum].getObjpronoun() + " instantly!";
+                    str = x.getConts()[tempnum].getName() + " eats some berries, but they're extremely poisonous, killing " + x.getConts()[tempnum].getObjpronoun() + " instantly!";
                 }
+                return {images:x.getImage(),main:str,combat:[]};
             }
-            return "false";
+            return {images:[],main:"false",combat:[]};
         }
     })
 ];
