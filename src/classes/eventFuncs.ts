@@ -60,7 +60,7 @@ the final line is just the winner of the fight
 This function could probably be condensed further by using recursion to swap the attacker/defender instead of having two loops
 but quite frankly, that will likely take longer to implement than it would save me development time 
 
-TODO: improve the combat rolls, lethal hits too frequent currently
+TODO: improve the combat rolls, lethal hits too frequent currently 
 */
 function attack(x:Contestant|Group, y:Contestant|Group, contArrX:Contestant[], contArrY:Contestant[]):string[]{
     let tempbuild = [];
@@ -101,33 +101,30 @@ function attack(x:Contestant|Group, y:Contestant|Group, contArrX:Contestant[], c
                 tempbuild.push(target.getName() + " is dead!\n");
                 attacker.upKills(1);
             }
+            //check if all x is dead (misfire)
+            for(let j = 0; j < contArrX.length; j++){
+                if(contArrX[j].getCond() != Condition.DEAD){
+                    break;
+                }
+                if(j == contArrX.length - 1){
+                    //loot
+                    tempbuild = tempbuild.concat(loot(y,x));
+                    //health report & finish
+                    for(let g = 0; g < contArrY.length;g++){
+                        tempbuild.push( contArrY[g].getName() + " ends the fight " + contArrY[g].getCondName() + "\n");
+                    }
+                    tempbuild.push(y.getName() + y.verbSwitchName(" wins "," win ") + "the fight.");
+                    return tempbuild;
+                }
+            }
             //check if all of y is dead
             for(let j = 0; j < contArrY.length; j++){
                 if(contArrY[j].getCond() != Condition.DEAD){
                     break;
                 }
                 if(j == contArrY.length - 1){
-                    //loot weapons
-                    let tookweps:Array<number> = [];
-                    for(let k = 0; k < contArrX.length; k++){
-                        let wepnum = -1;
-                        for(let n = 0; n < contArrY.length; n++){
-                            if(!tookweps.includes(n) && contArrX[k].newWeapon(contArrY[n].getWeapon())){//ensure same weapon isn't taken twice
-                                wepnum = n;
-                                break;
-                            }
-                        }
-                        if(wepnum != -1){//ensure best weapon is acquired
-                            tempbuild.push(contArrX[k].getName() + " takes " + contArrY[wepnum].getName() + "'s " + contArrY[wepnum].getWeapon().getName() + "\n");
-                            tookweps.push(wepnum);
-                        }
-                    }
-                    //loot items
-                    while(y.getItems().length > 0){
-                        let tempitem:item = y.getItems().pop();
-                        x.addItem(tempitem);
-                        tempbuild.push(x.getName() + x.verbSwitchName(" takes "," take ") + "a " + tempitem.getName() + " from " + y.getName() + "\n");
-                    }
+                    //loot
+                    tempbuild = tempbuild.concat(loot(x,y));
                     //health report & finish
                     for(let g = 0; g < contArrX.length;g++){
                         tempbuild.push( contArrX[g].getName() + " ends the fight " + contArrX[g].getCondName() + "\n");
