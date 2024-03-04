@@ -45,7 +45,6 @@ export function loot(x:Contestant|Group, y:Contestant|Group):string[]{
         x.addItem(tempitem);
         build.push(x.getName() + x.verbSwitchName(" takes "," take ") + "a " + tempitem.getName() + " from " + y.getName() + "\n");
     }
-    build.push(x.getName() + x.verbSwitchName(" takes "," take ") + "all of " + y.getName() + "'s items\n");
     return build;
 }
 
@@ -62,7 +61,7 @@ but quite frankly, that will likely take longer to implement than it would save 
 
 TODO: improve the combat rolls, lethal hits too frequent currently 
 */
-function attack(x:Contestant|Group, y:Contestant|Group, contArrX:Contestant[], contArrY:Contestant[]):string[]{
+function attack(contArrX:Contestant[], contArrY:Contestant[]):string[]{
     let tempbuild = [];
     for(let i = 0; i < contArrX.length; i++){
         if(contArrX[i].getCond() != Condition.DEAD){
@@ -101,43 +100,30 @@ function attack(x:Contestant|Group, y:Contestant|Group, contArrX:Contestant[], c
                 tempbuild.push(target.getName() + " is dead!\n");
                 attacker.upKills(1);
             }
-            //check if all x is dead (misfire)
-            for(let j = 0; j < contArrX.length; j++){
-                if(contArrX[j].getCond() != Condition.DEAD){
-                    break;
-                }
-                if(j == contArrX.length - 1){
-                    //loot
-                    tempbuild = tempbuild.concat(loot(y,x));
-                    //health report & finish
-                    for(let g = 0; g < contArrY.length;g++){
-                        tempbuild.push( contArrY[g].getName() + " ends the fight " + contArrY[g].getCondName() + "\n");
-                    }
-                    tempbuild.push(y.getName() + y.verbSwitchName(" wins "," win ") + "the fight.");
-                    return tempbuild;
-                }
-            }
-            //check if all of y is dead
-            for(let j = 0; j < contArrY.length; j++){
-                if(contArrY[j].getCond() != Condition.DEAD){
-                    break;
-                }
-                if(j == contArrY.length - 1){
-                    //loot
-                    tempbuild = tempbuild.concat(loot(x,y));
-                    //health report & finish
-                    for(let g = 0; g < contArrX.length;g++){
-                        tempbuild.push( contArrX[g].getName() + " ends the fight " + contArrX[g].getCondName() + "\n");
-                    }
-                    tempbuild.push(x.getName() + x.verbSwitchName(" wins "," win ") + "the fight.");
-                    return tempbuild;
-                }
-            }
         }
     }
     return tempbuild;
 }
 
+//if y is all dead, x loots y and wins, returns a multi-line string describing the loot and the condition of all members
+function checkCombatEnd(x:Contestant|Group, y:Contestant|Group, contArrX:Contestant[], contArrY:Contestant[]):string[]{
+    let tempbuild = [];
+    for(let j = 0; j < contArrY.length; j++){
+        if(contArrY[j].getCond() != Condition.DEAD){
+            break;
+        }
+        if(j == contArrY.length - 1){
+            tempbuild = tempbuild.concat(loot(x,y));
+            for(let g = 0; g < contArrX.length;g++){
+                tempbuild.push(contArrX[g].getName() + " ends the fight " + contArrX[g].getCondName() + "\n");
+            }
+            tempbuild.push(x.getName() + x.verbSwitchName(" wins "," win ") + "the fight.");
+            return tempbuild;
+            
+        }
+    }
+    return [];
+}
 
 export function combat(x: Contestant|Group, y: Contestant|Group):string[]{
     let build:string[] = [];
@@ -165,31 +151,41 @@ export function combat(x: Contestant|Group, y: Contestant|Group):string[]{
         contArrY = y.getConts();
     }
     console.log(build)
+    let arr1: string[], arr2: string[];
+    //attacking loop
     while(true){
-        //x attacks
-        build = build.concat(attack(x,y,contArrX,contArrY))
-        console.log(build)
-        for(let j = 0; j < contArrY.length; j++){
-            if(contArrY[j].getCond() != Condition.DEAD){
-                break;
-            }
-            if(j == contArrY.length - 1){
-                build = build.concat(loot(x,y));    
-                return build;
-            }
+        //x attacks y
+        build = build.concat(attack(contArrX,contArrY))
+        //check if either party is dead, if so, return the combat end string
+        arr1 = checkCombatEnd(x,y,contArrX,contArrY);
+        arr2 = checkCombatEnd(y,x,contArrY,contArrX);
+        if(arr1.length > 0 && arr2.length > 0){
+            build.push("ERROR: combat ended with both parties dead. what?")
+            return build;
         }
-        //y attacks
-        build = build.concat(attack(y,x,contArrY,contArrX))
-        for(let j = 0; j < contArrX.length; j++){
-            if(contArrX[j].getCond() != Condition.DEAD){
-                break;
-            }
-            if(j == contArrX.length - 1){
-                build = build.concat(loot(y,x));
-                return build;
-            }
+        else if(arr1.length > 0){
+            build = build.concat(arr1);
+            return build;
         }
-        console.log(build)
+        else if(arr2.length > 0){
+            build = build.concat(arr2);
+            return build;
+        }
+        //y attacks x
+        build = build.concat(attack(contArrY,contArrX))
+        //check if either party is dead, if so, return the combat end string
+        if(arr1.length > 0 && arr2.length > 0){
+            build.push("ERROR: combat ended with both parties dead. what?")
+            return build;
+        }
+        else if(arr1.length > 0){
+            build = build.concat(arr1);
+            return build;
+        }
+        else if(arr2.length > 0){
+            build = build.concat(arr2);
+            return build;
+        }
     }
     build.push("ERROR: combat loop exited without returning");
     return build;
