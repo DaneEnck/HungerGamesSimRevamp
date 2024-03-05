@@ -61,6 +61,11 @@
 			}
 		}
 			
+		//edge case
+		if(partyCopy.length == 0){
+			endstr.push("All contestants are dead! No winner!");
+			menuToggle = 2;
+		}
 		//if one party left, end game
 		if(partyCopy.length == 1){
 			if(partyCopy[0] instanceof Contestant){

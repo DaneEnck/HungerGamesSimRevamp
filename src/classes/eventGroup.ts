@@ -6,6 +6,10 @@ import Group from "./group";
 import { craftItemList } from "./item";
 import type EventStruct from './eventStruct';
 import { combat } from './eventFuncs';
+import { consumWep } from "./weapon";
+import { cloneConsumWep } from "./weapon";
+import { consumWepList } from "./weapon";
+import type Contestant from "./contestant";
 
 //events used for individual groups
 //TODO: add betrayal events
@@ -19,6 +23,25 @@ let groupList: Array<Function> = [
             }
         }
         return {images:x.getImage(),main:x.getName() + " recieve a " + thewep.getName() + " from a sponsor, but they all keep their current weapons",combat:[]};
+    },
+    function(x: Group):EventStruct{
+        let thewep:consumWep = consumWepList[Math.floor(Math.random() * consumWepList.length)];
+        //approximately order the contestants by the number of consum weapons they have, so the one with the least gets to check the new weapon first
+        let consumwepOrderedArr:Contestant[] = [x.getConts()[0]];
+        for(let i = 1; i < x.getConts().length; i++){
+            if(x.getConts()[i].getConsumWeps().length <= consumwepOrderedArr[0].getConsumWeps().length){
+                consumwepOrderedArr = [x.getConts()[i]].concat(consumwepOrderedArr);
+            }
+            else{
+                consumwepOrderedArr.push(x.getConts()[i]);
+            }
+        }
+        for(let i = 0; i < consumwepOrderedArr.length; i++){
+            if(consumwepOrderedArr[i].newConsumWeapon(cloneConsumWep(thewep))){
+                return {images:x.getImage(),main: x.getName() + " recieve a " + thewep.getName() + " from a sponsor. " + consumwepOrderedArr[i].getName() + " keeps it",combat:[]};
+            }
+        }
+        return {images:x.getImage(),main:x.getName() + " recieve a " + thewep.getName() + " from a sponsor, but do not need it",combat:[]};
     },
     function(x: Group):EventStruct{
         let theitem:item = itemList[Math.floor(Math.random() * itemList.length)]

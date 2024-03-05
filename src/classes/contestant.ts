@@ -1,4 +1,4 @@
-import { weapon } from "./weapon";
+import { consumWep, weapon } from "./weapon";
 import { item } from "./item";
 
 export const enum Condition{
@@ -17,6 +17,7 @@ export default class Contestant{
     objpronoun: string; //objective
     pospronoun: string; //possesive
     wep: weapon;
+    consumWeps: consumWep[];
     items: Array<item>;
     isInGroup: boolean;
     image: string;
@@ -29,7 +30,8 @@ export default class Contestant{
         this.pronoun = thePronoun;
         this.objpronoun = theObjpronoun; 
         this.pospronoun = thePospronoun;
-        this.wep = new weapon("fists",0,0,"hits",2)
+        this.wep = new weapon("fists",0,0,"hits",2,0)
+        this.consumWeps = [];
         this.items = [];
         this.isInGroup = false;
         this.image = theImage;
@@ -140,8 +142,28 @@ export default class Contestant{
         return false;
     }
 
+    getConsumWeps():consumWep[]{
+        return this.consumWeps;
+    }
+
+    newConsumWeapon(x: consumWep):boolean{
+        if(x.getHitAdd() > this.wep.getHitAdd()){
+            this.consumWeps.push(x);
+            return true
+        }
+        return false;
+    }
+
     loseWeapon(){
-        this.wep = new weapon("fists",0,0,"hits",2);
+        this.wep = new weapon("fists",0,0,"hits",2,0);
+    }
+
+    loseConsumWep(x: number):boolean{
+        if(this.consumWeps.length > 0){
+            this.consumWeps.splice(x,1);
+            return true;
+        }
+        return false;
     }
 
     getItems():Array<item>{

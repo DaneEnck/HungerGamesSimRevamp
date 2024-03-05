@@ -6,6 +6,9 @@ import { item } from "./item";
 import { craftItemList } from "./item";
 import type EventStruct from './eventStruct';
 import { capitalize } from "./eventFuncs";
+import { consumWep } from "./weapon";
+import { cloneConsumWep } from "./weapon";
+import { consumWepList } from "./weapon";
 
 //events used for individual contestants
 let soloList: Array<Function> = [
@@ -17,6 +20,15 @@ let soloList: Array<Function> = [
         }
         else{
             return {images:x.getImage(),main:x.getName() + " recieves a " + thewep.getName() + " from a sponsor, but keeps " + x.getPospronoun() + " current weapon",combat:[]};
+        }
+    },
+    function(x: Contestant):EventStruct{
+        let thewep:consumWep = consumWepList[Math.floor(Math.random() * consumWepList.length)];
+        if(x.newConsumWeapon(cloneConsumWep(thewep))){
+            return {images:x.getImage(),main: x.getName() + " recieves a " + thewep.getName() + " from a sponsor",combat:[]};
+        }
+        else{
+            return {images:x.getImage(),main:x.getName() + " recieves a " + thewep.getName() + " from a sponsor, but " + x.getPospronoun() + " main weapon is better",combat:[]};
         }
     },
     //contestant recieves random item from sponsor

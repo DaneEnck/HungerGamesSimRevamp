@@ -10,6 +10,7 @@ import { cornSoloList } from './eventCorn';
 import { cornMultiList } from './eventCorn';
 import type EventStruct from './eventStruct';
 import { groupBetrayList } from './eventGroup';
+import { cloneConsumWep, consumWepList } from './weapon';
 
 let endCounter = 3;
 
@@ -223,9 +224,15 @@ export default function hungerGames(parties:Array<Contestant|Group>,partyCopy:Ar
     //clear items & weapons from dead contestants
     for(let i = 0; i < numConts; i++){
         if(parties[i].getCond() == Condition.DEAD){
-            parties[i].loseWeapon();
-            while(parties[i].getItems().length > 0){
-                parties[i].getItems().splice(0,1);
+            let temp = parties[i];
+            temp.loseWeapon();
+            while(temp.getItems().length > 0){
+                temp.getItems().splice(0,1);
+            }
+            if (temp instanceof Contestant){ //should always be true (?)
+                while(temp.getConsumWeps().length > 0){
+                    temp.loseConsumWep(0);
+                }
             }
         }
     }

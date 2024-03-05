@@ -2,6 +2,8 @@ import Contestant from "./contestant";
 import Group from "./group";
 import { item } from "./item";
 import { Condition } from "./contestant";
+import { weapon } from "./weapon";
+import { consumWep } from "./weapon";
 
 //capitalizes first letter of a string
 export function capitalize(x:string):string{
@@ -45,6 +47,13 @@ export function loot(x:Contestant|Group, y:Contestant|Group):string[]{
         x.addItem(tempitem);
         build.push(x.getName() + x.verbSwitchName(" takes "," take ") + "a " + tempitem.getName() + " from " + y.getName() + "\n");
     }
+    for(let i = 0; i < contArrY.length; i++){
+        for(let j = 0; j < contArrY[i].getConsumWeps().length; j++){
+            let randmember = Math.floor(Math.random() * contArrX.length);
+            contArrX[randmember].newConsumWeapon(contArrY[i].getConsumWeps()[j]);
+            build.push(contArrX[randmember].getName() + contArrX[randmember].verbSwitchName(" takes "," take ") + "a " + contArrY[i].getConsumWeps()[j].getName() + " from " + contArrY[i].getName() + "\n");
+        }
+    }
     return build;
 }
 
@@ -67,25 +76,43 @@ function attack(contArrX:Contestant[], contArrY:Contestant[]):string[]{
         if(contArrX[i].getCond() != Condition.DEAD){
             let attacker = contArrX[i];
             let target:Contestant;
+            let attackWep:weapon|consumWep;
+            let attackWepIndex:number = -1;
+            //select best consumwep, if any
+            if(attacker.getConsumWeps().length > 0){
+                attackWep = attacker.getConsumWeps()[0]
+                for(let j = 1; j < attacker.getConsumWeps().length; j++){
+                    if(attacker.getConsumWeps()[j].getHitAdd() > attackWep.getHitAdd()){
+                        attackWep = attacker.getConsumWeps()[j];
+                        attackWepIndex = j;
+                    }
+                }
+            }
+            else{
+                attackWep = attacker.getWeapon();
+            }
             do{
                 target = contArrY[Math.floor(Math.random() * contArrY.length)];
             }while(target.getCond() == Condition.DEAD)
-            let randNum = Math.random() + attacker.getWeapon().getHitAdd() - target.getWeapon().getBlockAdd();
+            if(Math.random() < attackWep.getMisfireChance()){
+                tempbuild = tempbuild.concat(attackWep.getMisfire()(attacker, target,attackWep));
+            }
+            let randNum = Math.random() + attackWep.getHitAdd() - target.getWeapon().getBlockAdd();
             if(randNum < 0.4){
                 tempbuild.push(attacker.getName() + " misses\n");
             }
             else{
                 let minibuild = "";
-                minibuild += attacker.getName() + " " + attacker.getWeapon().getHitVerb() + " " + target.getName() + " with " + attacker.getPospronoun() + " " + attacker.getWeapon().getName() + ", injuring " + target.getObjpronoun();
-                if (randNum < 0.6 || attacker.getWeapon().getDamCap() == 1){
+                minibuild += attacker.getName() + " " + attackWep.getHitVerb() + " " + target.getName() + " with " + attacker.getPospronoun() + " " + attackWep.getName() + ", injuring " + target.getObjpronoun();
+                if (randNum < 0.6 || attackWep.getDamCap() == 1){
                     minibuild += " slightly\n";
                     target.downCond(1);
                 }
-                else if (randNum < 0.8 || attacker.getWeapon().getDamCap() == 2){
+                else if (randNum < 0.8 || attackWep.getDamCap() == 2){
                     minibuild += " moderately\n";
                     target.downCond(2);
                 }
-                else if (randNum < 0.9 || attacker.getWeapon().getDamCap() == 3){
+                else if (randNum < 0.9 || attackWep.getDamCap() == 3){
                     minibuild += " severely\n";
                     target.downCond(3);
                 }
@@ -94,6 +121,13 @@ function attack(contArrX:Contestant[], contArrY:Contestant[]):string[]{
                     target.setCond(Condition.DEAD);
                 }
                 tempbuild.push(minibuild);
+            }
+            if(attackWep instanceof consumWep){
+                attackWep.downUses(1);
+                if(attackWep.getUses() <= 0){
+                    attacker.loseConsumWep(attackWepIndex);
+                    tempbuild.push(attacker.getName() + " uses up " + attacker.getPospronoun() + " " + attackWep.getName() + "\n");
+                }
             }
             //check if target is dead
             if(target.getCond() == Condition.DEAD){
@@ -151,7 +185,7 @@ export function combat(x: Contestant|Group, y: Contestant|Group):string[]{
         contArrY = y.getConts();
     }
     console.log(build)
-    let arr1: string[], arr2: string[];
+    let arr1: string[], arr2: string[], first: boolean = true;
     //attacking loop
     while(true){
         //x attacks y
@@ -160,7 +194,7 @@ export function combat(x: Contestant|Group, y: Contestant|Group):string[]{
         arr1 = checkCombatEnd(x,y,contArrX,contArrY);
         arr2 = checkCombatEnd(y,x,contArrY,contArrX);
         if(arr1.length > 0 && arr2.length > 0){
-            build.push("ERROR: combat ended with both parties dead. what?")
+            build.push("All combatants died!")
             return build;
         }
         else if(arr1.length > 0){
@@ -174,8 +208,10 @@ export function combat(x: Contestant|Group, y: Contestant|Group):string[]{
         //y attacks x
         build = build.concat(attack(contArrY,contArrX))
         //check if either party is dead, if so, return the combat end string
+        arr1 = checkCombatEnd(x,y,contArrX,contArrY);
+        arr2 = checkCombatEnd(y,x,contArrY,contArrX);
         if(arr1.length > 0 && arr2.length > 0){
-            build.push("ERROR: combat ended with both parties dead. what?")
+            build.push("All combatants died!")
             return build;
         }
         else if(arr1.length > 0){
@@ -186,6 +222,7 @@ export function combat(x: Contestant|Group, y: Contestant|Group):string[]{
             build = build.concat(arr2);
             return build;
         }
+        first = false;
     }
     build.push("ERROR: combat loop exited without returning");
     return build;

@@ -41,10 +41,14 @@
                             {/if}	
                             <!--list weapon-->
                             <!--characters without a weapon have "fists" by default-->
-                            {#if thing.getWeapon().getName() != "fists"}
+                            {#if thing.getWeapon().getName() != "fists" || thing.getConsumWeps().length > 0}
                                 <p style = "margin:1px">Weapon:</p>
                                 <p style = "margin:1px">{thing.getWeapon().getName()}</p>
                             {/if}
+                            {#each thing.getConsumWeps() as wep}
+                                <p style = "margin:1px">{wep.getName()}</p>
+                                <p style = "margin:1px">{"Uses: " + wep.getUses()}</p>
+                            {/each}
                             <!--list items-->
                             {#if thing.getItems().length > 0}
                                 <p style = "margin:1px">Items:</p>
