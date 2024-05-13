@@ -184,7 +184,6 @@ export function combat(x: Contestant|Group, y: Contestant|Group):string[]{
         }
         contArrY = y.getConts();
     }
-    console.log(build)
     let arr1: string[], arr2: string[], first: boolean = true;
     //attacking loop
     while(true){
