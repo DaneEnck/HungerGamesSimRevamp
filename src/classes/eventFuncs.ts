@@ -103,21 +103,25 @@ function attack(contArrX:Contestant[], contArrY:Contestant[]):string[]{
             }
             else{
                 let minibuild = "";
-                minibuild += attacker.getName() + " " + attackWep.getHitVerb() + " " + target.getName() + " with " + attacker.getPospronoun() + " " + attackWep.getName() + ", injuring " + target.getObjpronoun();
+                minibuild += attacker.getName() + " " + attackWep.getHitVerb() + " " + target.getName();
                 if (randNum < 0.6 || attackWep.getDamCap() == 1){
-                    minibuild += " slightly\n";
+                    minibuild += " in the " + target.bodylight[Math.floor(Math.random() * target.bodylight.length)] 
+                    + " with " + attacker.getPospronoun() + " " + attackWep.getName() + ", injuring " + target.getObjpronoun() + " slightly\n";
                     target.downCond(1);
                 }
                 else if (randNum < 0.8 || attackWep.getDamCap() == 2){
-                    minibuild += " moderately\n";
+                    minibuild += " in the " + target.bodymed[Math.floor(Math.random() * target.bodymed.length)] 
+                    + " with " + attacker.getPospronoun() + " " + attackWep.getName() + ", injuring " + target.getObjpronoun() + " moderately\n";
                     target.downCond(2);
                 }
                 else if (randNum < 0.9 || attackWep.getDamCap() == 3){
-                    minibuild += " severely\n";
+                    minibuild += " in the " + target.bodyheavy[Math.floor(Math.random() * target.bodyheavy.length)] 
+                    + " with " + attacker.getPospronoun() + " " + attackWep.getName() + ", injuring " + target.getObjpronoun() + " severely\n";
                     target.downCond(3);
                 }
                 else{
-                    minibuild += " mortally\n";
+                    minibuild += " in the " + target.bodyheavy[Math.floor(Math.random() * target.bodyheavy.length)] 
+                    + " with " + attacker.getPospronoun() + " " + attackWep.getName() + ", killing " + target.getObjpronoun();" instantly\n";
                     target.setCond(Condition.DEAD);
                 }
                 tempbuild.push(minibuild);

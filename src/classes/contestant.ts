@@ -22,6 +22,11 @@ export default class Contestant{
     isInGroup: boolean;
     image: string;
     pronounCustomToggle: boolean; //used to switch between dropdown and text inputs in cont creation menu
+    //lists of body parts contestants can be hit in. syntax: "[name] was hit in the [bodypart]"
+    bodylight: Array<string> = ["ear","nose","hand","foot","finger","toe","cheek"];
+    bodymed: Array<string> = ["forearm","shin","thigh","calf","shoulder","hip","rib","jaw"];
+    bodyheavy: Array<string> = ["head","neck","guts","chest","face","back"];
+    //these will be customizable eventually
 
     constructor(theName: string, thePronoun: string, theObjpronoun:string, thePospronoun: string, theImage: string){
         this.name = theName;
