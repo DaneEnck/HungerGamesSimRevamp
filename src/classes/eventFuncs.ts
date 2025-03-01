@@ -91,9 +91,14 @@ function attack(contArrX:Contestant[], contArrY:Contestant[]):string[]{
             else{
                 attackWep = attacker.getWeapon();
             }
+            let counter = 0;
             do{
                 target = contArrY[Math.floor(Math.random() * contArrY.length)];
-            }while(target.getCond() == Condition.DEAD)
+                counter++;
+            }while(target.getCond() == Condition.DEAD && counter < 100);
+            if(counter == 100){
+                console.log("ERROR: living target not found");
+            }
             if(Math.random() < attackWep.getMisfireChance()){
                 tempbuild = tempbuild.concat(attackWep.getMisfire()(attacker, target,attackWep));
             }
@@ -191,7 +196,8 @@ export function combat(x: Contestant|Group, y: Contestant|Group):string[]{
     console.log(build)
     let arr1: string[], arr2: string[], first: boolean = true;
     //attacking loop
-    while(true){
+    let counter = 0;
+    while(true && counter < 100){
         //x attacks y
         build = build.concat(attack(contArrX,contArrY))
         //check if either party is dead, if so, return the combat end string
@@ -228,6 +234,7 @@ export function combat(x: Contestant|Group, y: Contestant|Group):string[]{
         }
         first = false;
     }
+    console.log("ERROR: combat loop exceeded 100 iterations");
     build.push("ERROR: combat loop exited without returning");
     return build;
 }

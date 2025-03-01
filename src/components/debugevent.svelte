@@ -8,9 +8,11 @@
     import groupList from '../classes/eventGroup';
     import multiList from '../classes/eventMulti';
     import { groupBetrayList } from '../classes/eventGroup';
+	import { Condition } from '../classes/contestant';
+	import hungerGames from '../classes/HungerGames';
 
     //when debug button is clicked
-	const debugHandler = () => {
+	const eventTestHandler= () => {
 		//run every event 10 times, printing to console. used to check all events for errors/crashes
 		let testCont1:Contestant
 		let testCont2:Contestant
@@ -132,6 +134,35 @@
             console.log(tempstruct.combat);
         }
 	}
+
+	const gameTestHandler = () => {
+		//run 100 games
+		for (let x = 0; x < 100; x++){
+			let parties = [];
+			let partyCopy = [];
+			let day = 0;
+			for(let i = 0; i < 24; i++){
+				parties.push(new Contestant("Contestant " + (i + 1).toString() ,"he","him","his","Default.png"))
+			}
+			partyCopy = Array.from(parties);
+
+			do{
+				hungerGames(parties,partyCopy,24,day);
+				day++;
+				partyCopy = Array.from(parties);
+				//remove dead contestants and contestants in groups from partyCopy. groups are always left in
+				for (let i = 0; i < 24; i++){
+					let temp = partyCopy[i];
+					if(temp instanceof Contestant && (temp.getCond() == Condition.DEAD || temp.getIsInGroup())){
+						partyCopy.splice(i,1);
+						i--;//array now shorter by 1, avoids skipping shift down
+					}
+				}
+			}while(partyCopy.length > 1)
+		}
+		console.log("100 games completed successfully")
+	}
 </script>
 
-<button on:click={debugHandler}>Debug (open console)</button>
+<button on:click={eventTestHandler}>Run every event (open console)</button>
+<button on:click={gameTestHandler}>Run 100 games (open console)</button>
