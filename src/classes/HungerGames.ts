@@ -5,7 +5,7 @@ import soloList from './eventSolo';
 import groupList from './eventGroup';
 import multiList from './eventMulti';
 import { item } from './item';
-import groupCreateList from './eventGroupCreate';
+import { groupCreateList } from './eventGroup';
 import { cornSoloList } from './eventCorn';
 import { cornMultiList } from './eventCorn';
 import type EventStruct from './eventStruct';
