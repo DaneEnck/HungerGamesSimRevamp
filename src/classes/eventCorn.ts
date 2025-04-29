@@ -1,7 +1,8 @@
 import Contestant from "./contestant";
 import wepList from "./weapon";
-import itemList from "./item";
+import itemList, { itemClone } from "./item";
 import { combat } from "./eventFuncs";
+import Group from "./group";
 import type EventStruct from "./eventStruct";
 
 //TODO: add more events
@@ -19,12 +20,30 @@ export const cornSoloList:Array<Function> = [
     function(x: Contestant):EventStruct{
         let randnum = Math.floor(Math.random() * itemList.length);
         let tempitem = itemList[randnum];
-        x.addItem(tempitem);
+        x.addItem(itemClone(tempitem));
         return {images:x.getImage(),main:x.getName() + " grabs a " + tempitem.getName() + " from the cornucopia",combat:[]};
     },
     //contestant runs away from cornucopia
     function(x: Contestant):EventStruct{
         return {images:x.getImage(),main: x.getName() + " runs away from the cornucopia",combat:[]};
+    },
+    //contestant hides in the cornucopia
+    function(x: Contestant):EventStruct{
+        return {images:x.getImage(),main: x.getName() + " hides in the cornucopia",combat:[]};
+    },
+    //contestant grabs a backpack
+    function(x: Contestant):EventStruct{
+        let build = x.getName() + " grabs a backpack from the cornucopia";
+        let rand = Math.random()
+        if (rand < 0.5){
+            build += ", only to later find it's empty"
+        }
+        else{
+            let theitem = itemList[Math.floor(Math.random() * itemList.length)]
+            x.addItem(itemClone(theitem));
+            build += ", it has a " + theitem.getName() + " inside";
+        }
+        return {images:x.getImage(),main: build,combat:[]}
     }
 ];
 
@@ -50,3 +69,7 @@ export const cornMultiList:Array<Function> = [
         return {images:x.getImage().concat(y.getImage()),main: x.getName() + " and " + y.getName() + " bump into eachother before reaching the cornucopia, and get in a fistfight",combat:combat(x,y)};
     }
 ];
+
+export const cornGroupList:Array<String> = [
+    " leave the cornucopia together, having agreed to an alliance before the game began"
+]

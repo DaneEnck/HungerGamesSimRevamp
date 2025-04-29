@@ -112,6 +112,29 @@ let soloList: Array<Function> = [
     function(x:Contestant):EventStruct{
         x.addItem(itemClone(craftItemList[3]));
         return {images:x.getImage(),main: x.getName() + " picks some berries",combat:[]};
+    },
+    //contestant finds a cave
+    function(x:Contestant):EventStruct{
+        return {images:x.getImage(),main: x.getName() + " finds a cave",combat:[]};
+    },
+    //contestant starts a fire
+    function(x:Contestant):EventStruct{
+        return {images:x.getImage(),main: x.getName() + " starts a fire",combat:[]};
+    },
+    //hunts for players
+    function(x:Contestant):EventStruct{
+        return {images:x.getImage(),main: x.getName() + " hunts for other players",combat:[]};
+    },
+    //tries to map out the arena
+    function(x:Contestant):EventStruct{
+        return {images:x.getImage(),main: x.getName() + " tries to map out the arena",combat:[]};
+    },
+    //trips
+    function(x:Contestant):EventStruct{
+        if (x.getCond() > 1){
+            x.downCond(1);
+        }
+        return {images:x.getImage(),main: x.getName() + " trips and sprains " + x.getPospronoun() + " ankle",combat:[]}
     }
 ]
 

@@ -5,7 +5,9 @@ import soloList from './eventSolo';
 import groupList from './eventGroup';
 import multiList from './eventMulti';
 import { item } from './item';
+import { groupCreateMain } from './eventGroup';
 import { groupCreateList } from './eventGroup';
+import { cornGroupList } from './eventCorn';
 import { cornSoloList } from './eventCorn';
 import { cornMultiList } from './eventCorn';
 import type EventStruct from './eventStruct';
@@ -112,7 +114,7 @@ export default function hungerGames(parties:Array<Contestant|Group>,partyCopy:Ar
                         randcont1 = Math.floor(Math.random()*partyCopy.length);
                         randcont2 = Math.floor(Math.random()*partyCopy.length); 
                     }while(randcont1 == randcont2);
-                    parties.push(groupCreateList[Math.floor(Math.random()*groupCreateList.length)]([partyCopy[randcont1], partyCopy[randcont2]]));
+                    parties.push(groupCreateMain([partyCopy[randcont1], partyCopy[randcont2]],groupCreateList));
                     buildarr.push({images:partyCopy[randcont1].getImage().concat(partyCopy[randcont2].getImage()),main:parties[parties.length-1].getString(),combat:[]});
                     partyCopy[randcont1].setIsInGroup(true);
                     partyCopy[randcont2].setIsInGroup(true);
@@ -126,7 +128,7 @@ export default function hungerGames(parties:Array<Contestant|Group>,partyCopy:Ar
                         randcont3 = Math.floor(Math.random()*partyCopy.length);
                     }while(randcont1 == randcont2 || randcont1 == randcont3 || randcont2 == randcont3);
                     let temparr = [randcont1, randcont2, randcont3];
-                    parties.push(groupCreateList[Math.floor(Math.random()*groupCreateList.length)]([partyCopy[randcont1], partyCopy[randcont2], partyCopy[randcont3]]));
+                    parties.push(groupCreateMain([partyCopy[randcont1], partyCopy[randcont2], partyCopy[randcont3]], groupCreateList));
                     buildarr.push({images:partyCopy[randcont1].getImage().concat(partyCopy[randcont2].getImage().concat(partyCopy[randcont3].getImage())),main:parties[parties.length-1].getString(),combat:[]});
                     while(temparr.length > 0){
                         partyCopy[Math.max(...temparr)].setIsInGroup(true);
@@ -181,9 +183,19 @@ export default function hungerGames(parties:Array<Contestant|Group>,partyCopy:Ar
                     randcont1 = Math.floor(Math.random()*partyCopy.length);
                     randcont2 = Math.floor(Math.random()*partyCopy.length);
                 }while(randcont1 == randcont2);//ensure different contestants are used
-                buildarr.push(cornMultiList[eventint](partyCopy[randcont1], partyCopy[randcont2]));
-                partyCopy.splice(Math.max(randcont1,randcont2),1);
-                partyCopy.splice(Math.min(randcont1,randcont2),1);
+                if (Math.random() < 0.2){
+                    parties.push(groupCreateMain([partyCopy[randcont1], partyCopy[randcont2]],cornGroupList));
+                    buildarr.push({images:partyCopy[randcont1].getImage().concat(partyCopy[randcont2].getImage()),main:parties[parties.length-1].getString(),combat:[]});
+                    partyCopy[randcont1].setIsInGroup(true);
+                    partyCopy[randcont2].setIsInGroup(true);
+                    partyCopy.splice(Math.max(randcont1,randcont2),1);
+                    partyCopy.splice(Math.min(randcont1,randcont2),1);
+                }
+                else{
+                    buildarr.push(cornMultiList[eventint](partyCopy[randcont1], partyCopy[randcont2]));
+                    partyCopy.splice(Math.max(randcont1,randcont2),1);
+                    partyCopy.splice(Math.min(randcont1,randcont2),1);
+                }
             }
         }
         if(DEBUG_LOG_EVENTS){
