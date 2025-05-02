@@ -35,7 +35,7 @@ export default class Contestant{
         this.pronoun = thePronoun;
         this.objpronoun = theObjpronoun; 
         this.pospronoun = thePospronoun;
-        this.wep = new weapon("fists",0,0,"hits",2,0)
+        this.wep = new weapon("fists",0,0,"punches",2,0)
         this.consumWeps = [];
         this.items = [];
         this.isInGroup = false;
