@@ -57,6 +57,27 @@ export function loot(x:Contestant|Group, y:Contestant|Group):string[]{
     return build;
 }
 
+//different miss text to be randomly selected
+let missList: Array<Function> =[
+    function(x: Contestant,y: Contestant):string{
+        return x.getName() + " misses " + y.getName() + "'s " + y.bodylight[Math.floor(Math.random() * y.bodylight.length)]
+        + " by an inch";
+    },
+    function(x: Contestant,y: Contestant):string{
+        if (y.getWeapon().getName() == "fists"){
+            return x.getName() + " " + x.getWeapon().getHitVerb() + " at " + y.getName() + ", but " + y.getPronoun()
+            + " catches " + x.getName() + "'s arm with " + y.getPospronoun() + " hands";
+        }
+        else{
+            return x.getName() + " " + x.getWeapon().getHitVerb() + " at " + y.getName() + ", but " + y.getPronoun() 
+            + " blocks the attack with " + y.getPospronoun() + " " + y.getWeapon().getName();
+        }
+    },
+    function(x: Contestant,y: Contestant):string{
+        return y.getName() + " dodges out of the way of " + x.getName() + "'s attack"
+    }
+]
+
 /*performs combat between two parties, either being a contestant or a group
 every member takes one attack against a random member of the opposing party, dealing no or some damage (applied to cond)
 each damage oppurtunity is decided by a randnum from 0 to 1. <0.4 misses (no damage), >0.9 is instantly lethal, in between deals varying damage levels
@@ -104,7 +125,7 @@ function attack(contArrX:Contestant[], contArrY:Contestant[]):string[]{
             }
             let randNum = Math.random() + attackWep.getHitAdd() - target.getWeapon().getBlockAdd();
             if(randNum < 0.4){
-                tempbuild.push(attacker.getName() + " misses\n");
+                tempbuild.push(missList[Math.floor(Math.random() * missList.length)](attacker, target));
             }
             else{
                 let minibuild = "";
