@@ -40,6 +40,8 @@
 
 	let selectBinds:string[] = [];//used to store the value of the pronoun select dropdowns
 
+	let gapToggle:boolean = false;
+
 	const EVENT_DEBUG_TOGGLE = true;//if true, adds button that tests every event, printing to console
 
 	for(let i = 0; i < numConts; i++){
@@ -180,12 +182,16 @@
 			<Debugevent/>
 		{/if}
 		<button on:click={aboutHandler}>About</button>
+		<h4>
+			<input type="checkbox" bind:checked={gapToggle}>
+			Downshift Events
+		</h4>
 		<Contcreate bind:numConts = {numConts} bind:creationConts = {creationConts}/>
 		<!--Game Start-->
 		<button on:click={creationEndHandler}>Start Game!</button>
 	<!--Main game display, shows list of events and activities of the characters-->
 	{:else if menuToggle == 1}
-		<Maingame bind:events = {events} bind:day = {day}/>
+		<Maingame bind:events = {events} bind:day = {day} bind:gapToggle = {gapToggle}/>
 		<button on:click={runDay}>next day</button>
 		<button on:click={prepDisplay}>view contestants</button>
 	<!--Winner screen, endimgs/endstr determined in runDay function-->

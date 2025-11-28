@@ -1,6 +1,7 @@
 <script lang="ts">
     export let events;
     export let day;
+    export let gapToggle;
 
     let combatDetailToggle = true;//used to toggle between multi line & single line combat description
 
@@ -22,6 +23,9 @@
         {/if}
     </h4>
     <p><br/></p>
+    {#if gapToggle}
+        <div class="spacer"><h5>Scroll down for events</h5></div>
+    {/if}
     <!--Event loop-->
     {#each events as event,i}
         <!--Images-->

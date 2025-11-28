@@ -161,3 +161,7 @@ h4 {
 	margin:auto;
 }
 
+.spacer{
+	background-color: grey;
+	height: 75vh;
+}
