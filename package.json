@@ -6,8 +6,7 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "start": "sirv public --no-clear",
-    "deploy": "npm run build && npx gh-pages -d public --dotfiles"
+    "start": "sirv public --no-clear"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^24.0.0",
