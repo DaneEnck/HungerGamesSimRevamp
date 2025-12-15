@@ -33,7 +33,7 @@ export default function hungerGames(parties:Array<Contestant|Group>,partyCopy:Ar
         let itemuse: item;
         let numargs: number;
         let tempEvent: EventStruct;
-        let randint: number;
+        let randint: number = 1;
         //chance to interupt item usage w/ random multi event
         //TODO: figure out why this happens so much (something wrong or bad luck?)
         if(partyCopy[i].getItems().length != 0 && partyCopy.length >= 2 && Math.random() < 0.1){
@@ -204,7 +204,8 @@ export default function hungerGames(parties:Array<Contestant|Group>,partyCopy:Ar
         passes++;
         if(passes > 1000){
             console.log("Error: infinite loop in event selection");
-            buildarr = [{images:[],main:"Error: infinite loop in event selection. The game is now unstable!",combat:[]}].concat(buildarr);
+            let hold = [{images:[],main:"Error: infinite loop in event selection. The game is now unstable!",combat:[]}];
+            buildarr = buildarr.concat(hold);
             break;
         }
     }
