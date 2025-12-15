@@ -43,6 +43,7 @@ export function loot(x:Contestant|Group, y:Contestant|Group):string[]{
     }
     //loot items
     while(y.getItems().length > 0){
+        // @ts-ignore checking list length before performing pop ensures pop wont return empty
         let tempitem:item = y.getItems().pop();
         x.addItem(tempitem);
         build.push(x.getName() + x.verbSwitchName(" takes "," take ") + "a " + tempitem.getName() + " from " + y.getName() + "\n");
