@@ -42,7 +42,7 @@
 
 	let gapToggle:boolean = false;
 
-	const EVENT_DEBUG_TOGGLE = true;//if true, adds button that tests every event, printing to console
+	const EVENT_DEBUG_TOGGLE = false;//if true, adds button that tests every event, printing to console
 
 	for(let i = 0; i < numConts; i++){
 		selectBinds.push("1");
