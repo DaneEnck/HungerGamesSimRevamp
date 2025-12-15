@@ -92,7 +92,7 @@ but quite frankly, that will likely take longer to implement than it would save 
 TODO: improve the combat rolls, lethal hits too frequent currently 
 */
 function attack(contArrX:Contestant[], contArrY:Contestant[]):string[]{
-    let tempbuild = [];
+    let tempbuild:string[] = [];
     for(let i = 0; i < contArrX.length; i++){
         if(contArrX[i].getCond() != Condition.DEAD){
             let attacker = contArrX[i];
@@ -171,7 +171,7 @@ function attack(contArrX:Contestant[], contArrY:Contestant[]):string[]{
 
 //if y is all dead, x loots y and wins, returns a multi-line string describing the loot and the condition of all members
 function checkCombatEnd(x:Contestant|Group, y:Contestant|Group, contArrX:Contestant[], contArrY:Contestant[]):string[]{
-    let tempbuild = [];
+    let tempbuild:string[] = [];
     for(let j = 0; j < contArrY.length; j++){
         if(contArrY[j].getCond() != Condition.DEAD){
             break;
