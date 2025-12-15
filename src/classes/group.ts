@@ -97,7 +97,7 @@ export default class Group{
     purge():void{
         //remove dead members of group
         for(let j = 0; j < this.ppl.length; j++){
-            if(this.ppl[j].getCond() == 0){
+            if(this.ppl[j].getCond() <= 0){
                 this.ppl.splice(j,1);
                 j--;
             }
