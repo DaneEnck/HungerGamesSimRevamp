@@ -7,8 +7,10 @@ import livereload from 'rollup-plugin-livereload';
 import css from 'rollup-plugin-css-only';
 import autoPreprocess from 'svelte-preprocess';
 import typescript from '@rollup/plugin-typescript';
+import replace from '@rollup/plugin-replace';
 
 const production = !process.env.ROLLUP_WATCH;
+const basePath = production ? '/HungerGamesSimRevamp' : ''; 
 
 function serve() {
 	let server;
@@ -40,6 +42,12 @@ export default {
 		file: 'public/build/bundle.js'
 	},
 	plugins: [
+		replace({
+      preventAssignment: true,
+      values: {
+        'process.env.BASE_PATH': JSON.stringify(basePath)
+      }
+    }),
 		svelte({
 			preprocess: autoPreprocess(),
 			compilerOptions: {
