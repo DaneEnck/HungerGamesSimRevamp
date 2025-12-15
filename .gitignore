@@ -4,5 +4,3 @@
 /**/*.js
 /**/*.map
 !rollup.config.js
-!bundle.js
-!bundle.js.map
